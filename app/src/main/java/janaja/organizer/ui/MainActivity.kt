@@ -1,7 +1,8 @@
-package janaja.organizer
+package janaja.organizer.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import janaja.organizer.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
