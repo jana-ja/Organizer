@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<janaja.organizer.ui.home.NoteCardViewHeader
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/sp_note_cardview_category"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:entries="@array/planets_array"
+        app:layout_constraintBottom_toTopOf="@+id/rv_home_cardview_notes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_home_cardview_header" />
+</janaja.organizer.ui.home.NoteCardViewHeader>
+

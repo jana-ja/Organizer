@@ -11,9 +11,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.HomeFragment">
+        tools:context=".ui.home.HomeFragment">
 
-        <janaja.organizer.ui.NoteCardView
+        <janaja.organizer.ui.home.NoteCardView
             android:id="@+id/cv_home_notes"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             custom:title_text="Lol"/>
 
-        <janaja.organizer.ui.NoteCardView
+        <janaja.organizer.ui.home.NoteCardView
             android:id="@+id/cv_home_reminders"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -29,22 +29,12 @@
             app:layout_constraintTop_toBottomOf="@+id/cv_home_notes"
             app:title_text="Hehe"/>
 
-        <com.google.android.material.card.MaterialCardView
+        <janaja.organizer.ui.home.DecisionCardView
             android:id="@+id/cv_home_decisions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_home_reminders">
+            app:layout_constraintTop_toBottomOf="@+id/cv_home_reminders"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="hint" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

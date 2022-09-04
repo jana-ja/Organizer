@@ -1,4 +1,4 @@
-package janaja.organizer.ui
+package janaja.organizer.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import janaja.organizer.R
+import janaja.organizer.ui.SharedViewModel
 
 class HomeFragment : Fragment() {
 
