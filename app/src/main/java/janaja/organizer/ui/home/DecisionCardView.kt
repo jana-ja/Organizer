@@ -8,13 +8,15 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import janaja.organizer.R
+import janaja.organizer.databinding.DecisionCardviewContentBinding
+import janaja.organizer.databinding.DecisionCardviewHeaderBinding
 import janaja.organizer.databinding.HomeCardviewBinding
 
 class DecisionCardView(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
 
-    var titleText: String = ""
-    val gurki = "beste babe"
     val binding: HomeCardviewBinding
+    val headerBinding: DecisionCardviewHeaderBinding
+    val contentBinding: DecisionCardviewContentBinding
 
     init {
         binding = DataBindingUtil.inflate(
@@ -23,33 +25,26 @@ class DecisionCardView(context: Context, attrs: AttributeSet) : CardView(context
             this,
             true
         )
-        //binding = NoteCardviewBinding.inflate(LayoutInflater.from(context))
 
-        context.theme.obtainStyledAttributes(
-            attrs,
-            R.styleable.MyCardView,
-            0, 0
-        ).apply {
-
-            try {
-                titleText = getString(R.styleable.MyCardView_title_text).toString()
-            } finally {
-                recycle()
-            }
-        }
+        // manage header
+        headerBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.decision_cardview_header,
+            binding.flHomeCardviewHeader,
+            true
+        )
 
 
-//        val header: NoteCardViewHeader = inflate(context, R.layout.decision_cardview_header, null) as NoteCardViewHeader
-//        binding.flHomeCardviewHeader.addView(header)
-        binding.flHomeCardviewHeader.addView(inflate(context, R.layout.decision_cardview_header, null))
-
-//        val content: DecisionCardViewContent = inflate(context, R.layout.decision_cardview_content, null) as DecisionCardViewContent
-//        binding.flHomeCardviewContent.addView(content)
+        // manage content
         val params = binding.flHomeCardviewContent.layoutParams
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT
         binding.flHomeCardviewContent.layoutParams = params
-        binding.flHomeCardviewContent.addView(inflate(context, R.layout.decision_cardview_content, null))
+        contentBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.decision_cardview_content,
+            binding.flHomeCardviewContent,
+            true
+        )
 
-        findViewById<TextView>(R.id.textView3).text = "lol"
     }
 }
