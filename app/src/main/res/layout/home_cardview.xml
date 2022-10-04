@@ -21,8 +21,9 @@
             <FrameLayout
                 android:id="@+id/fl_home_cardview_header"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@color/primary"
+                android:layout_height="@dimen/cardview_header_height"
+                android:background="?attr/colorPrimaryContainer"
+                android:elevation="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

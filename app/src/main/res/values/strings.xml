@@ -1,15 +1,8 @@
 <resources>
     <string name="app_name">Organizer</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
-    </string-array>
+    <string name="decision_cardview_title">Decisions</string>
+    <string name="decision_promt_text">Your Life Question</string>
+    <string name="dummy_category_name">Category Name</string>
+    <string name="dummy_note_title">Note Title</string>
+    <string name="dummy_note_text">My very important note text!\nDummy dumm dummy</string>
 </resources>
