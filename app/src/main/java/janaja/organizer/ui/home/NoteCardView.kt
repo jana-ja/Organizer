@@ -8,6 +8,8 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
+import janaja.organizer.adapter.NoteRecyclerViewAdapter
+import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.NoteCardviewHeaderBinding
@@ -34,11 +36,11 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
             binding.flHomeCardviewHeader,
             true
         )
-        val spinner: Spinner = headerBinding.spNoteCardviewCategory
-        // TODO dummy content
-        spinner.adapter = CategorySpinnerAdapter(context = context, itemList = listOf("Wichtig", "Kaufen", "Traumtagebuch", "Erinnerungen"))
-        spinner.dropDownHorizontalOffset = spinner.height
-
+        headerBinding.spNoteCardviewCategory.also {
+            // TODO dummy content
+            it.adapter = CategorySpinnerAdapter(context = context, itemList = listOf("Wichtig", "Kaufen", "Traumtagebuch", "Erinnerungen"))
+            it.dropDownHorizontalOffset = it.height
+        }
 
         // manage content
         contentBinding = DataBindingUtil.inflate(
@@ -53,5 +55,10 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
 //                LinearLayoutManager.VERTICAL
 //            )
 //        )
+        NoteRecyclerViewAdapter().also {
+            it.submitList(mutableListOf(Note("Title", "Body"), Note("Title Haha", "ICh mache nOtiz\nSuper toll"), Note("Wow", "GuNa\nhehe\nlänger"), Note("Kaufen", "Spa"), Note("Kaufen", "Spaghetti\nHände\nTomaten\nbrrrr\nlelel")))
+            contentBinding.rvHomeCardviewNotes.adapter = it
+        }
+
     }
 }
