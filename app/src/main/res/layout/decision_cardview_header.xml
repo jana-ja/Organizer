@@ -12,11 +12,15 @@
 
         <TextView
             android:id="@+id/textView3"
+            style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:layout_marginStart="8dp"
+            android:text="@string/decision_cardview_title"
+            android:textColor="?attr/colorOnPrimaryContainer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

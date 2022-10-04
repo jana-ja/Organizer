@@ -3,21 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/custom_preview.xml" value="0.25" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.335" />
         <entry key="app/src/main/res/drawable/border_background.xml" value="0.2185" />
+        <entry key="app/src/main/res/drawable/help.xml" value="0.111" />
+        <entry key="app/src/main/res/drawable/ic_baseline_help_center_24.xml" value="0.226" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.228125" />
         <entry key="app/src/main/res/layout/activity_note_detail.xml" value="0.23489583333333333" />
-        <entry key="app/src/main/res/layout/decision_cardview_content.xml" value="0.29635416666666664" />
+        <entry key="app/src/main/res/layout/decision_cardview_content.xml" value="0.375" />
         <entry key="app/src/main/res/layout/decision_cardview_header.xml" value="0.29635416666666664" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_note_detail.xml" value="0.2833333333333333" />
         <entry key="app/src/main/res/layout/fragment_note_overview.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/home_cardview.xml" value="0.165" />
         <entry key="app/src/main/res/layout/home_cardview_note_content.xml" value="0.29635416666666664" />
         <entry key="app/src/main/res/layout/home_cardview_note_header.xml" value="0.29635416666666664" />
         <entry key="app/src/main/res/layout/note_cardview.xml" value="0.22364217252396165" />
         <entry key="app/src/main/res/layout/note_cardview_content.xml" value="0.29739583333333336" />
         <entry key="app/src/main/res/layout/note_cardview_header.xml" value="0.37777777777777777" />
         <entry key="app/src/main/res/layout/note_list_item.xml" value="0.29739583333333336" />
+        <entry key="app/src/main/res/layout/spinner_item.xml" value="0.22864583333333333" />
       </map>
     </option>
   </component>
