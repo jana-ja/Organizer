@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
+import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
@@ -56,7 +57,7 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
 //            )
 //        )
         NoteRecyclerViewAdapter().also {
-            it.submitList(mutableListOf(Note("Title", "Body"), Note("Title Haha", "ICh mache nOtiz\nSuper toll"), Note("Wow", "GuNa\nhehe\nlänger"), Note("Kaufen", "Spa"), Note("Kaufen", "Spaghetti\nHände\nTomaten\nbrrrr\nlelel")))
+            it.submitList(Repository.getInstance().dummyData)
             contentBinding.rvHomeCardviewNotes.adapter = it
         }
 
