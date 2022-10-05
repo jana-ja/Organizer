@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu>
+<!--
+    <item
+        android:id="@+id/edit"
+        android:contentDescription="suche"
+        android:title="edit"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/favorite"
+        android:contentDescription="favorit"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="fav"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/more"
+        android:contentDescription="mehr"
+        android:title="mehr"
+        app:showAsAction="never" />
+-->
+</menu>
