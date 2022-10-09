@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.Note
+import janaja.organizer.ui.home.HomeFragmentDirections
 
 class NoteRecyclerViewAdapter : RecyclerView.Adapter<NoteRecyclerViewAdapter.ItemViewHolder>() {
 
@@ -16,6 +19,7 @@ class NoteRecyclerViewAdapter : RecyclerView.Adapter<NoteRecyclerViewAdapter.Ite
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.note_title)
         val body: TextView = view.findViewById(R.id.note_body)
+        val card: CardView = view.findViewById(R.id.note_card)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -44,6 +48,12 @@ class NoteRecyclerViewAdapter : RecyclerView.Adapter<NoteRecyclerViewAdapter.Ite
         val note = dataset[position]
         holder.title.text = note.title
         holder.body.text = note.body
+        holder.card.setOnClickListener{
+            val navController = holder.itemView.findNavController()
+
+            navController.navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(note.id))
+
+        }
     }
 
     override fun getItemCount(): Int {
