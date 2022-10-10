@@ -21,7 +21,7 @@
             app:layout_constraintBottom_toTopOf="@+id/cv_home_reminders"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <janaja.organizer.ui.home.NoteCardView
+        <janaja.organizer.ui.home.ReminderCardView
             android:id="@+id/cv_home_reminders"
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">Organizer</string>
+
     <string name="decision_cardview_title">Decisions</string>
     <string name="decision_promt_text">Your Life Question</string>
+
+    <string name="note_cardview_title">Notes</string>
+
+    <string name="reminder_cardview_title">Reminders</string>
+
     <string name="dummy_category_name">Category Name</string>
     <string name="dummy_note_title">Note Title</string>
     <string name="dummy_note_body">My very important note text!\nDummy dumm dummy</string>
-    <string name="topAppBarTitle">Organizer</string>
 </resources>
