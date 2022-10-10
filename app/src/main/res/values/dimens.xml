@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="cardview_header_height">48dp</dimen>
+    <dimen name="reminder_card_width">140dp</dimen>
 </resources>
