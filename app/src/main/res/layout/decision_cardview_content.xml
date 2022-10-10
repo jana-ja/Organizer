@@ -33,18 +33,12 @@
 
         <Button
             android:id="@+id/imageButton"
-            style="Widget.Material3.Button.IconButton.Filled"
-            android:layout_width="50dp"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorPrimaryContainer"
-            android:insetLeft="0dp"
-            android:insetTop="0dp"
-            android:insetRight="0dp"
-            android:insetBottom="0dp"
-            app:icon="@drawable/help"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
             app:iconTint="?attr/colorOnPrimaryContainer"
+            app:icon="@drawable/help"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textInputLayout2" />
