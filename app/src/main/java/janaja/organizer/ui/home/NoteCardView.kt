@@ -3,14 +3,12 @@ package janaja.organizer.ui.home
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.Spinner
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
 import janaja.organizer.data.Repository
-import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.NoteCardviewHeaderBinding
@@ -58,7 +56,7 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
 //            )
 //        )
         NoteRecyclerViewAdapter().also {
-            it.submitList(Repository.getInstance().dummyData)
+            it.submitList(Repository.getInstance().dummyNoteData)
             contentBinding.rvHomeCardviewNotes.adapter = it
         }
 

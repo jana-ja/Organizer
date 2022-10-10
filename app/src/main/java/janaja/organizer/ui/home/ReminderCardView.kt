@@ -5,20 +5,21 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
 import janaja.organizer.adapter.ReminderRecyclerViewAdapter
 import janaja.organizer.data.Repository
 import janaja.organizer.databinding.HomeCardviewBinding
+import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.NoteCardviewHeaderBinding
-import janaja.organizer.databinding.ReminderCardviewContentBinding
 
 class ReminderCardView(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
 
     private val gurki = "beste babe"
     private val binding: HomeCardviewBinding
     private val headerBinding: NoteCardviewHeaderBinding
-    private val contentBinding: ReminderCardviewContentBinding
+    private val contentBinding: NoteCardviewContentBinding
 
     init {
         binding = DataBindingUtil.inflate(
@@ -45,14 +46,17 @@ class ReminderCardView(context: Context, attrs: AttributeSet) : CardView(context
         // manage content
         contentBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.reminder_cardview_content,
+            R.layout.note_cardview_content,
             binding.flHomeCardviewContent,
             true
         )
         ReminderRecyclerViewAdapter().also {
-            it.submitList(Repository.getInstance().dummyData)
+            it.submitList(Repository.getInstance().dummyTodoData)
             contentBinding.rvHomeCardviewNotes.adapter = it
         }
-
+        LinearLayoutManager(context).also{
+            it.orientation = LinearLayoutManager.HORIZONTAL
+            contentBinding.rvHomeCardviewNotes.layoutManager = it
+        }
     }
 }

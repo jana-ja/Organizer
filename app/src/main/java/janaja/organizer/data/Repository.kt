@@ -5,17 +5,23 @@ import janaja.organizer.data.model.Note
 class Repository {
 
 
-    val dummyData = mutableListOf(
-        Note(0, "Title", "Body"),
-        Note(1, "Title Haha", "ICh mache nOtiz\nSuper toll"),
-        Note(2, "Wow", "GuNa\nhehe\nlänger"),
-        Note(3, "Kaufen", "Spa"),
-        Note(4, "Kaufen", "Spaghetti\nHände\nTomaten\nbrrrr\nlelel")
+    val dummyNoteData = mutableListOf(
+        Note(0, "Title", mutableListOf("Body")),
+        Note(1, "Title Haha", mutableListOf("ICh mache nOtiz","Super toll")),
+        Note(2, "Wow", mutableListOf("GuNa","hehe","länger"), true),
+        Note(3, "Kaufen", mutableListOf("Spa")),
+        Note(4, "Kaufen", mutableListOf("Spaghetti","Hände","Tomaten","brrrr","lelel","Spaghetti","Hände","Tomaten","brrrr","lelel","Tomaten","brrrr","lelel"))
+    )
+    val dummyTodoData = mutableListOf(
+        Note(0, "Täglich", mutableListOf("Wasser trinken", "1 Teil aufräumen", "Essen"),true),
+        Note(1, "Wöchentlich", mutableListOf("ICh mache nOtiz","Super toll"), true),
+        Note(2, "Monatlich", mutableListOf("GuNa","hehe","länger"), true),
+        Note(4, "Kaufen", mutableListOf("Spaghetti","Hände","Tomaten","brrrr","lelel","Spaghetti","Hände","Tomaten","brrrr","lelel","Tomaten","brrrr","lelel"), true)
     )
 
     fun getNote(id: Long): Note? {
         // TODO dummy method
-        dummyData.filter { note: Note -> note.id == id }.also {
+        dummyNoteData.filter { note: Note -> note.id == id }.also {
             return if (it.isNotEmpty()) it[0] else null
         }
     }
