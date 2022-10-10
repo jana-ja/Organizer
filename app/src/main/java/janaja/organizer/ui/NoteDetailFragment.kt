@@ -7,6 +7,7 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
+import janaja.organizer.adapter.NoteEntryRecyclerViewAdapter
 import janaja.organizer.data.Repository
 import janaja.organizer.databinding.FragmentNoteDetailBinding
 
@@ -27,7 +28,7 @@ class NoteDetailFragment : Fragment() {
 
         if(note != null) {
             binding.detailNoteTitle.text = note.title
-            binding.detailNoteBody.text = note.body
+            binding.detailNoteBodyRv.adapter = NoteEntryRecyclerViewAdapter(note.body)
         }
 
 
