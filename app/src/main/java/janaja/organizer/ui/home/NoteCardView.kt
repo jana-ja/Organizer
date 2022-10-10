@@ -5,13 +5,16 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
 import janaja.organizer.data.Repository
+import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.NoteCardviewHeaderBinding
+import kotlin.random.Random
 
 class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
 
@@ -19,6 +22,7 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
     private val binding: HomeCardviewBinding
     private val headerBinding: NoteCardviewHeaderBinding
     private val contentBinding: NoteCardviewContentBinding
+    private lateinit var adapter: NoteRecyclerViewAdapter
 
     init {
         binding = DataBindingUtil.inflate(
@@ -41,6 +45,12 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
             it.adapter = CategorySpinnerAdapter(context = context, itemList = listOf("Wichtig", "Kaufen", "Traumtagebuch", "Erinnerungen"))
             it.dropDownHorizontalOffset = it.height
         }
+        headerBinding.cardviewAddButton.setOnClickListener{
+            // TODO dummy data id
+            val id = Random.nextLong()
+            adapter.addItem(Note(id))
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(id))
+        }
 
         // manage content
         contentBinding = DataBindingUtil.inflate(
@@ -49,13 +59,7 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
             binding.flHomeCardviewContent,
             true
         )
-//        contentBinding.rvHomeCardviewNotes.addItemDecoration(
-//            DividerItemDecoration(
-//                context,
-//                LinearLayoutManager.VERTICAL
-//            )
-//        )
-        NoteRecyclerViewAdapter().also {
+        adapter = NoteRecyclerViewAdapter().also {
             it.submitList(Repository.getInstance().dummyNoteData)
             contentBinding.rvHomeCardviewNotes.adapter = it
         }
