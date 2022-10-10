@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
@@ -22,6 +23,7 @@ open class NoteRecyclerViewAdapter : RecyclerView.Adapter<NoteRecyclerViewAdapte
         val body: TextView = view.findViewById(R.id.note_body)
         val bodyRv: RecyclerView = view.findViewById(R.id.note_body_rv)
         val card: CardView = view.findViewById(R.id.note_card)
+        val noteCl: ConstraintLayout = view.findViewById(R.id.note_cl)
     }
 
     @SuppressLint("NotifyDataSetChanged")
