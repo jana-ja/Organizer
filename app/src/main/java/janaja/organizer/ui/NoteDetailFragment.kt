@@ -28,7 +28,13 @@ class NoteDetailFragment : Fragment() {
 
         if(note != null) {
             binding.detailNoteTitle.text = note.title
-            binding.detailNoteBodyRv.adapter = NoteEntryRecyclerViewAdapter(note.body)
+            if(note.isCheckList){
+                binding.detailNoteBody.visibility = View.GONE
+                binding.detailNoteBodyRv.visibility = View.VISIBLE
+                binding.detailNoteBodyRv.adapter = NoteEntryRecyclerViewAdapter(note.body)
+            } else {
+                binding.detailNoteBody.text = note.body.joinToString(separator = "\n")
+            }
         }
 
 
