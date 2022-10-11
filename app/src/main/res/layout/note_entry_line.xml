@@ -4,16 +4,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <CheckedTextView
+    <TextView
         android:id="@+id/note_entry_line"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dummy_note_body"
-        android:gravity="center_vertical"
-        android:checkMark="@drawable/ic_baseline_check_24"
         style="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:checkMark="@drawable/ic_baseline_check_24"
+        android:gravity="center_vertical"
+        android:text="@string/dummy_note_body"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/note_entry_checkBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/note_entry_checkBox"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="?android:attr/listChoiceIndicatorMultiple"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/note_entry_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/note_entry_line" />
 </androidx.constraintlayout.widget.ConstraintLayout>

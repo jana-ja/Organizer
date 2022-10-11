@@ -1,22 +1,24 @@
 package janaja.organizer.data
 
+import janaja.organizer.data.model.Line
 import janaja.organizer.data.model.Note
 
 class Repository {
 
 
     val dummyNoteData = mutableListOf(
-        Note(0, "Title", mutableListOf("Body")),
-        Note(1, "Title Haha", mutableListOf("ICh mache nOtiz","Super toll")),
-        Note(2, "Wow", mutableListOf("GuNa","hehe","länger"), true),
-        Note(3, "Kaufen", mutableListOf("Spa")),
-        Note(4, "Kaufen", mutableListOf("Spaghetti","Hände","Tomaten","brrrr","lelel","Spaghetti","Hände","Tomaten","brrrr","lelel","Tomaten","brrrr","lelel"))
+        Note(0, "Title", mutableListOf(Line("Body"))),
+        Note(1, "Title Haha", mutableListOf(Line("ICh mache nOtiz"),Line("Super toll"))),
+        Note(2, "Wow", mutableListOf(Line("GuNa"),Line("hehe"),Line("länger"))),
+        Note(3, "Kaufen", mutableListOf(Line("Spa"))),
+        Note(4, "Kaufen", mutableListOf(Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr"),Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr")))
     )
     val dummyTodoData = mutableListOf(
-        Note(5, "Täglich", mutableListOf("Wasser trinken", "1 Teil aufräumen", "Essen"),true),
-        Note(6, "Wöchentlich", mutableListOf("ICh mache nOtiz","Super toll"), true),
-        Note(7, "Monatlich", mutableListOf("GuNa","hehe","länger"), true),
-        Note(8, "Kaufen", mutableListOf("Spaghetti","Hände","Tomaten","brrrr","lelel","Spaghetti","Hände","Tomaten","brrrr","lelel","Tomaten","brrrr","lelel"), true)
+        Note(0, "Title", mutableListOf(Line("Body")),true),
+        Note(1, "Title Haha", mutableListOf(Line("ICh mache nOtiz"),Line("Super toll")),true),
+        Note(2, "Wow", mutableListOf(Line("GuNa"),Line("hehe"),Line("länger")),true),
+        Note(3, "Kaufen", mutableListOf(Line("Spa")),true),
+        Note(4, "Kaufen", mutableListOf(Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr")),true)
     )
 
     fun getNote(id: Long): Note? {

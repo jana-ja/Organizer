@@ -1,26 +1,29 @@
 package janaja.organizer.adapter
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckedTextView
+import android.widget.CheckBox
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
-import kotlin.random.Random
+import janaja.organizer.data.model.Line
 
-class NoteEntryRecyclerViewAdapter(var dataset: MutableList<String>) : RecyclerView.Adapter<NoteEntryRecyclerViewAdapter.ItemViewHolder>(){
+class NoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) : RecyclerView.Adapter<NoteEntryRecyclerViewAdapter.ItemViewHolder>(){
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val line: CheckedTextView = view.findViewById(R.id.note_entry_line)
+        val lineText: TextView = view.findViewById(R.id.note_entry_line)
+        val checkBox: CheckBox = view.findViewById(R.id.note_entry_checkBox)
     }
 
     fun newLine(){
-        dataset.add("")
+        dataset.add(Line("", false))
         notifyItemInserted(dataset.lastIndex)
     }
 
     fun addItem(line: String){
-        dataset.add(line)
+        dataset.add(Line(line, false))
         notifyItemInserted(dataset.lastIndex)
     }
 
@@ -37,9 +40,22 @@ class NoteEntryRecyclerViewAdapter(var dataset: MutableList<String>) : RecyclerV
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val line = dataset[position]
-        holder.line.text = line
-        if(Random.nextInt() % 2 == 0)
-            holder.line.isChecked
+        holder.lineText.text = line.text
+        holder.checkBox.isChecked = line.isChecked
+        if(line.isChecked){
+            holder.lineText.paintFlags = holder.lineText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }
+
+        holder.checkBox.setOnClickListener {
+            line.isChecked = holder.checkBox.isChecked
+            if(holder.checkBox.isChecked){
+                holder.lineText.paintFlags = holder.lineText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            } else {
+                holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+        }
     }
 
     override fun getItemCount(): Int {
