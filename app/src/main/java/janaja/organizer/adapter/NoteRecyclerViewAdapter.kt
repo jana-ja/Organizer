@@ -93,45 +93,31 @@ open class NoteRecyclerViewAdapter :
 
         // handle recyclerview
         holder.bodyRv.setOnClickListener(onClick)
+        // detect longClick is complicated. GestureDetector didn't work (detecting LonPress every time no matter what)
+        // start coroutine that's waiting for 400ms (Androids LongPressTimeOut)
+        // if UP or CANCEL movement is detected, the coroutine is stopped.
+        // if it finishes waiting then a long click is detected.
         holder.bodyRv.setOnTouchListener { _, e ->
-            Log.i("onTouchEvent", e.toString())
-
             val time = SystemClock.uptimeMillis() - e.downTime
-
             when (e.action) {
-
                 MotionEvent.ACTION_DOWN -> {
-//                Log.i("TAG", "action down: $time")
-
                     job = holder.itemView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
-                        detectLongClick(holder, onLongClick)
+                        delay(ViewConfiguration.getLongPressTimeout().toLong())
+                        onLongClick(holder)
+                        Log.i("coroutine", "detected long press")
                     }
-
                 }
                 MotionEvent.ACTION_UP -> {
-//                Log.i("TAG", "action up: $time")
                     job?.cancel()
                     if (time < ViewConfiguration.getLongPressTimeout().toLong()) {
-                        Log.i("TAG", "onClick detected: $time")
                         holder.bodyRv.callOnClick()
                     }
-
                 }
                 MotionEvent.ACTION_CANCEL -> job?.cancel()
             }
             true
         }
-
     }
-
-    suspend fun detectLongClick(holder: ItemViewHolder, onLongClick: (ItemViewHolder) -> Unit) {
-
-        delay(ViewConfiguration.getLongPressTimeout().toLong())
-        onLongClick(holder)
-        Log.i("coroutine", "detected long press")
-    }
-
-
 
     override fun getItemCount(): Int {
         return dataset.size
