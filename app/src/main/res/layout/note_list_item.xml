@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <janaja.organizer.ui.MyRecyclerView
             android:id="@+id/note_body_rv"
             android:visibility="gone"
             android:layout_width="match_parent"
