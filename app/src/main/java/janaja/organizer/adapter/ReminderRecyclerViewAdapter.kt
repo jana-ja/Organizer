@@ -7,12 +7,12 @@ import janaja.organizer.R
 class ReminderRecyclerViewAdapter() : NoteRecyclerViewAdapter() {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
         holder.card.layoutParams.width = holder.itemView.resources.getDimension(R.dimen.reminder_card_width).toInt()
         holder.card.layoutParams.height = LayoutParams.MATCH_PARENT
         holder.noteCl.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_PARENT
         holder.bodyRv.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-
-        super.onBindViewHolder(holder, position)
     }
 
 }
