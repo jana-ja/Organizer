@@ -1,16 +1,18 @@
 package janaja.organizer.adapter
 
 import android.annotation.SuppressLint
+import android.content.res.Resources.Theme
 import android.os.SystemClock
 import android.util.Log
+import android.util.TypedValue
 import android.view.*
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import janaja.organizer.R
 import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
@@ -20,12 +22,13 @@ open class NoteRecyclerViewAdapter :
     RecyclerView.Adapter<NoteRecyclerViewAdapter.ItemViewHolder>() {
 
     open var dataset: MutableList<Note> = mutableListOf()
+    var selected: MutableList<Boolean> = mutableListOf()
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.note_title)
         val body: TextView = view.findViewById(R.id.note_body)
         val bodyRv: RecyclerView = view.findViewById(R.id.note_body_rv)
-        val card: CardView = view.findViewById(R.id.note_card)
+        val card: MaterialCardView = view.findViewById(R.id.note_card)
         val noteCl: ConstraintLayout = view.findViewById(R.id.note_cl)
     }
     var job: Job? = null
@@ -35,16 +38,19 @@ open class NoteRecyclerViewAdapter :
     @SuppressLint("NotifyDataSetChanged")
     fun submitList(noteList: MutableList<Note>) {
         dataset = noteList
+        selected = MutableList(dataset.size){false}
         notifyDataSetChanged()
     }
 
     fun addItem(note: Note) {
         dataset.add(0, note)
+        selected.add(0,false)
         notifyItemInserted(0)
     }
 
     fun removeitem(position: Int) {
         dataset.removeAt(position)
+        selected.removeAt(position)
         notifyItemRemoved(position)
     }
 
@@ -66,12 +72,14 @@ open class NoteRecyclerViewAdapter :
         }
 
         // recyclerview and its parent cardview should have the same behaviour
-        manageClickListeners(holder, note)
+        manageClickListeners(holder, position)
 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun manageClickListeners(holder: ItemViewHolder, note: Note) {
+    private fun manageClickListeners(holder: ItemViewHolder, position: Int) {
+        val note = dataset[position]
+
         val onClick: (View) -> Unit = {
             val navController = holder.itemView.findNavController()
             navController.navigate(
@@ -81,7 +89,21 @@ open class NoteRecyclerViewAdapter :
             )
         }
         val onLongClick: (holder: ItemViewHolder) -> Unit = {
-            holder.card.cardElevation = 50F
+            if(selected[position]){
+                holder.card.strokeWidth = 0
+                val typedValue = TypedValue()
+                val theme: Theme = holder.itemView.context.theme
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
+                holder.noteCl.setBackgroundColor(typedValue.data)
+
+            } else {
+                holder.card.strokeWidth = 3
+                val typedValue = TypedValue()
+                val theme: Theme = holder.itemView.context.theme
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceVariant, typedValue, true)
+                holder.noteCl.setBackgroundColor(typedValue.data)
+            }
+            selected[position] = !selected[position]
         }
 
         // handle cardview
