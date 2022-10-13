@@ -25,6 +25,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
     private val viewModel: SharedViewModel by activityViewModels()
 
     var actionMode: ActionMode? = null
+    lateinit var noteAdapter: NoteRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +56,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        NoteRecyclerViewAdapter(this).also {
+        noteAdapter = NoteRecyclerViewAdapter(this).also {
             it.submitList(Repository.getInstance().dummyNoteData)
             binding.cvHomeNotes.setNoteRecyclerViewAdapter(it)
         }
@@ -77,8 +78,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
                 // action mode already active
             } else {
                 // activate action mode
-                actionMode = requireActivity().startActionMode(actionModeCallback
-                )
+                actionMode = requireActivity().startActionMode(actionModeCallback)
             }
         }
     }
@@ -98,18 +98,18 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
             when(item?.itemId){
                 R.id.card_selected_menu_delete -> {
                     Toast.makeText(requireContext(), "löschen", Toast.LENGTH_SHORT).show()
+                    // TODO delete
                     mode?.finish()
                     return true
                 }
                 else -> return false
             }
-            // TODO add X to deselect everything
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
             actionMode = null
+            noteAdapter.unselectAll()
         }
 
     }
-
 }

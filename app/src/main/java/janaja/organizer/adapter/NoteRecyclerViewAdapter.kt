@@ -23,6 +23,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
 
     open var dataset: MutableList<Note> = mutableListOf()
     var selected: MutableList<Boolean> = mutableListOf()
+    private lateinit var mRecyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.note_title)
@@ -32,27 +33,6 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
         val noteCl: ConstraintLayout = view.findViewById(R.id.note_cl)
     }
     var job: Job? = null
-
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(noteList: MutableList<Note>) {
-        dataset = noteList
-        selected = MutableList(dataset.size){false}
-        notifyDataSetChanged()
-    }
-
-    fun addItem(note: Note) {
-        dataset.add(0, note)
-        selected.add(0,false)
-        notifyItemInserted(0)
-    }
-
-    fun removeitem(position: Int) {
-        dataset.removeAt(position)
-        selected.removeAt(position)
-        notifyItemRemoved(position)
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val itemLayout = LayoutInflater.from(parent.context)
@@ -74,6 +54,29 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
         // recyclerview and its parent cardview should have the same behaviour
         manageClickListeners(holder, position)
 
+    }
+
+    override fun getItemCount(): Int {
+        return dataset.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun submitList(noteList: MutableList<Note>) {
+        dataset = noteList
+        selected = MutableList(dataset.size){false}
+        notifyDataSetChanged()
+    }
+
+    fun addItem(note: Note) {
+        dataset.add(0, note)
+        selected.add(0,false)
+        notifyItemInserted(0)
+    }
+
+    fun removeitem(position: Int) {
+        dataset.removeAt(position)
+        selected.removeAt(position)
+        notifyItemRemoved(position)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -142,9 +145,22 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
             true
         }
     }
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mRecyclerView = recyclerView
+    }
+    fun unselectAll(){
+        for (i in selected.indices){
+            if(selected[i]){
+                val holder = mRecyclerView.getChildViewHolder(mRecyclerView.getChildAt(i)) as ItemViewHolder
+                holder.card.strokeWidth = 0
+                val typedValue = TypedValue()
+                val theme: Theme = holder.itemView.context.theme
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
+                holder.noteCl.setBackgroundColor(typedValue.data)
+            }
+        }
 
-    override fun getItemCount(): Int {
-        return dataset.size
     }
 
     interface ContextualAppBarHandler{
