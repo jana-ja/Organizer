@@ -18,7 +18,7 @@ import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
 import kotlinx.coroutines.*
 
-open class NoteRecyclerViewAdapter :
+open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler) :
     RecyclerView.Adapter<NoteRecyclerViewAdapter.ItemViewHolder>() {
 
     open var dataset: MutableList<Note> = mutableListOf()
@@ -90,13 +90,14 @@ open class NoteRecyclerViewAdapter :
         }
         val onLongClick: (holder: ItemViewHolder) -> Unit = {
             if(selected[position]){
+                // is already selected
                 holder.card.strokeWidth = 0
                 val typedValue = TypedValue()
                 val theme: Theme = holder.itemView.context.theme
                 theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
                 holder.noteCl.setBackgroundColor(typedValue.data)
-
             } else {
+                // is not selected
                 holder.card.strokeWidth = 3
                 val typedValue = TypedValue()
                 val theme: Theme = holder.itemView.context.theme
@@ -104,6 +105,7 @@ open class NoteRecyclerViewAdapter :
                 holder.noteCl.setBackgroundColor(typedValue.data)
             }
             selected[position] = !selected[position]
+            handler.selectAction(selected.count{it})
         }
 
         // handle cardview
@@ -143,5 +145,9 @@ open class NoteRecyclerViewAdapter :
 
     override fun getItemCount(): Int {
         return dataset.size
+    }
+
+    interface ContextualAppBarHandler{
+        fun selectAction(selectCount: Int)
     }
 }

@@ -7,8 +7,7 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import janaja.organizer.R
-import janaja.organizer.adapter.ReminderRecyclerViewAdapter
-import janaja.organizer.data.Repository
+import janaja.organizer.adapter.NoteRecyclerViewAdapter
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.ReminderCardviewHeaderBinding
@@ -44,13 +43,14 @@ class ReminderCardView(context: Context, attrs: AttributeSet) : CardView(context
             binding.flHomeCardviewContent,
             true
         )
-        ReminderRecyclerViewAdapter().also {
-            it.submitList(Repository.getInstance().dummyTodoData)
-            contentBinding.rvHomeCardviewNotes.adapter = it
-        }
         LinearLayoutManager(context).also{
             it.orientation = LinearLayoutManager.HORIZONTAL
             contentBinding.rvHomeCardviewNotes.layoutManager = it
         }
+    }
+
+
+    fun setNoteRecyclerViewAdapter(adapter: NoteRecyclerViewAdapter) {
+        contentBinding.rvHomeCardviewNotes.adapter = adapter
     }
 }

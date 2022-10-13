@@ -27,5 +27,10 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+
+        <!-- contextual action bar -->
+        <item name="actionBarTheme">@style/ThemeOverlay.Material3.Dark.ActionBar</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close_on_secondary_container</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 </resources>

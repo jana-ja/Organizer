@@ -4,7 +4,7 @@ import android.app.ActionBar.LayoutParams
 import androidx.constraintlayout.widget.ConstraintLayout
 import janaja.organizer.R
 
-class ReminderRecyclerViewAdapter() : NoteRecyclerViewAdapter() {
+class ReminderRecyclerViewAdapter(handler: ContextualAppBarHandler) : NoteRecyclerViewAdapter(handler) {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

@@ -9,7 +9,6 @@ import androidx.navigation.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
-import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
@@ -59,10 +58,10 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
             binding.flHomeCardviewContent,
             true
         )
-        adapter = NoteRecyclerViewAdapter().also {
-            it.submitList(Repository.getInstance().dummyNoteData)
-            contentBinding.rvHomeCardviewNotes.adapter = it
-        }
-
     }
+
+    fun setNoteRecyclerViewAdapter(adapter: NoteRecyclerViewAdapter) {
+        contentBinding.rvHomeCardviewNotes.adapter = adapter
+    }
+
 }
