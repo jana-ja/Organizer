@@ -84,37 +84,23 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
         val note = dataset[position]
 
         val onClick: (View) -> Unit = {
-            val navController = holder.itemView.findNavController()
-            navController.navigate(
-                HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(
-                    note.id
+            Log.i("onClick", "selected count: ${selected.count{it}}")
+            if(selected.count{it} > 0)
+                onLongClick(holder, position)
+            else {
+                val navController = holder.itemView.findNavController()
+                navController.navigate(
+                    HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(
+                        note.id
+                    )
                 )
-            )
-        }
-        val onLongClick: (holder: ItemViewHolder) -> Unit = {
-            if(selected[position]){
-                // is already selected
-                holder.card.strokeWidth = 0
-                val typedValue = TypedValue()
-                val theme: Theme = holder.itemView.context.theme
-                theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-                holder.noteCl.setBackgroundColor(typedValue.data)
-            } else {
-                // is not selected
-                holder.card.strokeWidth = 3
-                val typedValue = TypedValue()
-                val theme: Theme = holder.itemView.context.theme
-                theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceVariant, typedValue, true)
-                holder.noteCl.setBackgroundColor(typedValue.data)
             }
-            selected[position] = !selected[position]
-            handler.selectAction(selected.count{it})
         }
 
         // handle cardview
         holder.card.setOnClickListener(onClick)
         holder.card.setOnLongClickListener {
-            onLongClick(holder)
+            onLongClick(holder, position)
             true
         }
 
@@ -130,7 +116,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
                 MotionEvent.ACTION_DOWN -> {
                     job = holder.itemView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
                         delay(ViewConfiguration.getLongPressTimeout().toLong())
-                        onLongClick(holder)
+                        onLongClick(holder, position)
                         Log.i("coroutine", "detected long press")
                     }
                 }
@@ -145,10 +131,33 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
             true
         }
     }
+
+    private fun onLongClick(holder: ItemViewHolder, position: Int){
+        Log.i("onLongClick","selected: ${selected[position]}")
+        if(selected[position]){
+            // is already selected
+            holder.card.strokeWidth = 0
+            val typedValue = TypedValue()
+            val theme: Theme = holder.itemView.context.theme
+            theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
+            holder.noteCl.setBackgroundColor(typedValue.data)
+        } else {
+            // is not selected
+            holder.card.strokeWidth = 3
+            val typedValue = TypedValue()
+            val theme: Theme = holder.itemView.context.theme
+            theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceVariant, typedValue, true)
+            holder.noteCl.setBackgroundColor(typedValue.data)
+        }
+        selected[position] = !selected[position]
+        handler.selectAction(selected.count{it})
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         mRecyclerView = recyclerView
     }
+
     fun unselectAll(){
         for (i in selected.indices){
             if(selected[i]){
@@ -158,6 +167,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
                 val theme: Theme = holder.itemView.context.theme
                 theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
                 holder.noteCl.setBackgroundColor(typedValue.data)
+                selected[i] = false
             }
         }
 
