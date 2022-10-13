@@ -80,7 +80,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun manageClickListeners(holder: ItemViewHolder, position: Int) {
+    open fun manageClickListeners(holder: ItemViewHolder, position: Int) {
         val note = dataset[position]
 
         val onClick: (View) -> Unit = {
