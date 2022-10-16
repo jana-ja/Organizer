@@ -37,10 +37,12 @@ class Repository {
 
     fun deleteNotes(indices: List<Int>) {
         // TODO dummy method
-        val list = dummyNoteData.value!!
-        indices.reversed().forEach { list.removeAt(it) }
-        dummyNoteData.value = list
+        indices.reversed().forEach { dummyNoteData.value?.removeAt(it) }
+        dummyNoteData.notifyObserver()
+    }
 
+    fun <T> MutableLiveData<T>.notifyObserver() {
+        this.value = this.value
     }
 
     companion object {
