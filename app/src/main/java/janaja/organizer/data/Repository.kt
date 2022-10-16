@@ -35,13 +35,18 @@ class Repository {
         return null
     }
 
+    fun addNote(note: Note){
+        dummyNoteData.value?.add(0, note)
+        dummyNoteData.notifyObservers()
+    }
+
     fun deleteNotes(indices: List<Int>) {
         // TODO dummy method
         indices.reversed().forEach { dummyNoteData.value?.removeAt(it) }
-        dummyNoteData.notifyObserver()
+        dummyNoteData.notifyObservers()
     }
 
-    fun <T> MutableLiveData<T>.notifyObserver() {
+    fun <T> MutableLiveData<T>.notifyObservers() {
         this.value = this.value
     }
 

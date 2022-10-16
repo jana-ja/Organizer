@@ -8,11 +8,14 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
 import janaja.organizer.adapter.ReminderRecyclerViewAdapter
+import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
+import kotlin.random.Random
 
 class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler {
 
@@ -67,6 +70,12 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
                 binding.cvHomeReminders.setNoteRecyclerViewAdapter(it)
             }
         }
+
+        binding.cvHomeNotes.setAddbuttonOnClickListener{
+            // TODO dummy data id
+            val id = Random.nextLong()
+            viewModel.addNote(Note(id))
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(id))}
 
     }
 

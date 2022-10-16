@@ -18,4 +18,8 @@ class SharedViewModel : ViewModel() {
         repository.deleteNotes(indices)
     }
 
+    fun addNote(note: Note){
+        repository.addNote(note)
+    }
+
 }

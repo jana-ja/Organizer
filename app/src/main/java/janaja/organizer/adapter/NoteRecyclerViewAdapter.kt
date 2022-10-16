@@ -61,19 +61,12 @@ open class NoteRecyclerViewAdapter(open var dataset: MutableList<Note>, private 
         return dataset.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun updateList() {
         selected = MutableList(dataset.size){false}
         NoteDiffCallback(oldList, dataset).also{
             DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
         }
         oldList = dataset.toList()
-    }
-
-    fun addItem(note: Note) {
-        dataset.add(0, note)
-        selected.add(0,false)
-        notifyItemInserted(0)
     }
 
     @SuppressLint("ClickableViewAccessibility")
