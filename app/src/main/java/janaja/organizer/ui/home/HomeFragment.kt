@@ -17,12 +17,9 @@ import janaja.organizer.ui.SharedViewModel
 
 class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
-
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: SharedViewModel by activityViewModels()
+    private var selectCount: Int? = null
 
     var actionMode: ActionMode? = null
     lateinit var noteAdapter: NoteRecyclerViewAdapter
@@ -68,6 +65,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
     }
 
     override fun selectAction(selectCount: Int) {
+        this.selectCount = selectCount
         if(selectCount == 0){
             // nothing selected
             if(actionMode != null)
@@ -76,6 +74,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
             // something selected
             if(actionMode != null){
                 // action mode already active
+                actionMode?.title = "$selectCount"
             } else {
                 // activate action mode
                 actionMode = requireActivity().startActionMode(actionModeCallback)
@@ -86,7 +85,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
     private val actionModeCallback = object : ActionMode.Callback{
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             mode?.menuInflater?.inflate(R.menu.card_selected_top_app_bar, menu)
-            mode?.title = "selected"
+            mode?.title = "$selectCount"
             return true
         }
 
