@@ -1,40 +1,52 @@
 package janaja.organizer.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import janaja.organizer.data.model.Line
 import janaja.organizer.data.model.Note
 
 class Repository {
 
 
-    val dummyNoteData = mutableListOf(
+    val dummyNoteData: MutableLiveData<MutableList<Note>> = MutableLiveData(mutableListOf(
         Note(0, "Title", mutableListOf(Line("Body"))),
-        Note(1, "Title Haha", mutableListOf(Line("ICh mache nOtiz"),Line("Super toll"))),
+        Note(1, "Title Haha", mutableListOf(Line("ICh mache nOtiz"),Line("Super toll")),true),
         Note(2, "Wow", mutableListOf(Line("GuNa"),Line("hehe"),Line("länger"))),
         Note(3, "Kaufen", mutableListOf(Line("Spa"))),
         Note(4, "Kaufen", mutableListOf(Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr"),Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr")))
-    )
-    val dummyTodoData = mutableListOf(
-        Note(0, "Title", mutableListOf(Line("Body")),true),
-        Note(1, "Title Haha", mutableListOf(Line("ICh mache nOtiz"),Line("Super toll")),true),
-        Note(2, "Wow", mutableListOf(Line("GuNa"),Line("hehe"),Line("länger")),true),
-        Note(3, "Kaufen", mutableListOf(Line("Spa")),true),
-        Note(4, "Kaufen", mutableListOf(Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr")),true)
-    )
+    ))
+    val dummyTodoData: LiveData<MutableList<Note>> = MutableLiveData(mutableListOf(
+        Note(5, "Heute", mutableListOf(Line("Wasser trinken"), Line("Aufräumen")),true),
+        Note(6, "Diese Woche", mutableListOf(Line("Sport"),Line("Lesen"), Line("Pflanzen gießen")),true),
+        Note(7, "Diesen Monat", mutableListOf(Line("Putzen"),Line("Auto Check")),true),
+        Note(8, "Backlog", mutableListOf(Line("Aussortieren")),true),
+    ))
 
     fun getNote(id: Long): Note? {
         // TODO dummy method
-        dummyNoteData.filter { note: Note -> note.id == id }.also {
+        dummyNoteData.value?.filter { note: Note -> note.id == id }.also {
+            if(it != null)
             if (it.isNotEmpty()) return it[0]
         }
-        dummyTodoData.filter { note: Note -> note.id == id }.also {
-            return if (it.isNotEmpty()) it[0] else null
+        dummyTodoData.value?.filter { note: Note -> note.id == id }.also {
+            if(it != null)
+                return if (it.isNotEmpty()) it[0] else null
         }
+        return null
+    }
+
+    fun deleteNotes(indices: List<Int>) {
+        // TODO dummy method
+        val list = dummyNoteData.value!!
+        indices.reversed().forEach { list.removeAt(it) }
+        dummyNoteData.value = list
+
     }
 
     companion object {
         private var instance: Repository? = null
 
-        fun getInstance(): Repository {
+        fun getRepository(): Repository {
             return instance ?: synchronized(this) {
                 instance ?: Repository().also { instance = it }
             }

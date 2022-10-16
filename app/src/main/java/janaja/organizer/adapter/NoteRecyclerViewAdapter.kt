@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import janaja.organizer.R
@@ -18,11 +19,11 @@ import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
 import kotlinx.coroutines.*
 
-open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler) :
+open class NoteRecyclerViewAdapter(open var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :
     RecyclerView.Adapter<NoteRecyclerViewAdapter.ItemViewHolder>() {
 
-    open var dataset: MutableList<Note> = mutableListOf()
-    var selected: MutableList<Boolean> = mutableListOf()
+    var oldList = dataset.toList()
+    var selected: MutableList<Boolean> = MutableList(dataset.size){false}
     private lateinit var mRecyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -61,22 +62,18 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitList(noteList: MutableList<Note>) {
-        dataset = noteList
+    fun updateList() {
         selected = MutableList(dataset.size){false}
-        notifyDataSetChanged()
+        NoteDiffCallback(oldList, dataset).also{
+            DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
+        }
+        oldList = dataset.toList()
     }
 
     fun addItem(note: Note) {
         dataset.add(0, note)
         selected.add(0,false)
         notifyItemInserted(0)
-    }
-
-    fun removeitem(position: Int) {
-        dataset.removeAt(position)
-        selected.removeAt(position)
-        notifyItemRemoved(position)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -86,7 +83,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
         val onClick: (View) -> Unit = {
             Log.i("onClick", "selected count: ${selected.count{it}}")
             if(selected.count{it} > 0)
-                onLongClick(holder, position)
+                onLongClick(holder)
             else {
                 val navController = holder.itemView.findNavController()
                 navController.navigate(
@@ -100,7 +97,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
         // handle cardview
         holder.card.setOnClickListener(onClick)
         holder.card.setOnLongClickListener {
-            onLongClick(holder, position)
+            onLongClick(holder)
             true
         }
 
@@ -116,7 +113,7 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
                 MotionEvent.ACTION_DOWN -> {
                     job = holder.itemView.findViewTreeLifecycleOwner()?.lifecycleScope?.launch {
                         delay(ViewConfiguration.getLongPressTimeout().toLong())
-                        onLongClick(holder, position)
+                        onLongClick(holder)
                         Log.i("coroutine", "detected long press")
                     }
                 }
@@ -132,7 +129,8 @@ open class NoteRecyclerViewAdapter(private val handler: ContextualAppBarHandler)
         }
     }
 
-    private fun onLongClick(holder: ItemViewHolder, position: Int){
+    private fun onLongClick(holder: ItemViewHolder){
+        val position = holder.layoutPosition // maybe adapterPosition??
         Log.i("onLongClick","selected: ${selected[position]}")
         if(selected[position]){
             // is already selected

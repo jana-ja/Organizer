@@ -9,9 +9,10 @@ import android.view.ViewConfiguration
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import janaja.organizer.R
+import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
 
-class ReminderRecyclerViewAdapter(handler: ContextualAppBarHandler) : NoteRecyclerViewAdapter(handler) {
+class ReminderRecyclerViewAdapter(dataset: MutableList<Note>, handler: ContextualAppBarHandler) : NoteRecyclerViewAdapter(dataset, handler) {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

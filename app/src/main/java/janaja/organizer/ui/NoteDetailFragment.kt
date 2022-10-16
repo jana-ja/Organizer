@@ -13,7 +13,7 @@ import janaja.organizer.databinding.FragmentNoteDetailBinding
 
 class NoteDetailFragment : Fragment() {
 
-    private val repo = Repository.getInstance()
+    private val repo = Repository.getRepository()
     private lateinit var binding: FragmentNoteDetailBinding
     private var noteId: Long = -1
 
