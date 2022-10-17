@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
-import janaja.organizer.adapter.NoteEntryRecyclerViewAdapter
+import janaja.organizer.adapter.DetailNoteEntryRecyclerViewAdapter
 import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Line
 import janaja.organizer.data.model.Note
@@ -21,6 +21,7 @@ class NoteDetailFragment : Fragment() {
     private lateinit var binding: FragmentNoteDetailBinding
     // TODO lateinit and null type not possible. how to handle porperly?
     private var note: Note? = null
+    private lateinit var adapter: DetailNoteEntryRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +38,8 @@ class NoteDetailFragment : Fragment() {
             if(note.isCheckList){
                 binding.detailNoteBody.visibility = View.GONE
                 binding.detailNoteBodyRv.visibility = View.VISIBLE
-                binding.detailNoteBodyRv.adapter = NoteEntryRecyclerViewAdapter(note.body)
+                adapter = DetailNoteEntryRecyclerViewAdapter(note.body)
+                binding.detailNoteBodyRv.adapter = adapter
             } else {
                 binding.detailNoteBody.setText(note.body.joinToString(separator = "\n"))
             }
@@ -73,8 +75,12 @@ class NoteDetailFragment : Fragment() {
         super.onStop()
         if(note != null) {
             note!!.title = binding.detailNoteTitle.text.toString()
-            val body = binding.detailNoteBody.text.toString()
-            note!!.body = body.split("\n").map { s -> Line(s, false) }.toMutableList()
+            if(note!!.isCheckList){
+                note!!.body = adapter.getAllLines()
+            } else {
+                val body = binding.detailNoteBody.text.toString()
+                note!!.body = body.split("\n").map { s -> Line(s, false) }.toMutableList()
+            }
             viewModel.updateNote(note!!)
         }
     }

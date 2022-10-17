@@ -10,7 +10,7 @@
 
     <string name="dummy_category_name">Category Name</string>
     <string name="dummy_note_title">Note Title</string>
-    <string name="dummy_note_body">My very important note text!\nDummy dumm dummy</string>
+    <string name="dummy_note_body">Note Text</string>
     <string name="selected_card_delete_description">delete selected items</string>
     <string name="delete">delete</string>
 </resources>
