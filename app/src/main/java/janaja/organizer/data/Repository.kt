@@ -50,6 +50,17 @@ class Repository {
         this.value = this.value
     }
 
+    fun updateNote(note: Note) {
+        // TODO dummy method
+        val list = dummyNoteData.value
+        if(list != null) {
+            val oldNote = list.find { it.id == note.id }
+            val index = list.indexOf(oldNote)
+            list.removeAt(index)
+            list.add(index, note)
+        }
+    }
+
     companion object {
         private var instance: Repository? = null
 

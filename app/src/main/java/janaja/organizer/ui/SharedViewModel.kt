@@ -22,4 +22,8 @@ class SharedViewModel : ViewModel() {
         repository.addNote(note)
     }
 
+    fun updateNote(note: Note){
+        repository.updateNote(note)
+    }
+
 }

@@ -5,17 +5,22 @@ import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
 import janaja.organizer.adapter.NoteEntryRecyclerViewAdapter
 import janaja.organizer.data.Repository
+import janaja.organizer.data.model.Line
+import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentNoteDetailBinding
 
 class NoteDetailFragment : Fragment() {
 
+    private val viewModel: SharedViewModel by activityViewModels()
     private val repo = Repository.getRepository()
     private lateinit var binding: FragmentNoteDetailBinding
-    private var noteId: Long = -1
+    // TODO lateinit and null type not possible. how to handle porperly?
+    private var note: Note? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,17 +28,18 @@ class NoteDetailFragment : Fragment() {
     ): View {
         binding = FragmentNoteDetailBinding.inflate(inflater)
 
-        noteId = requireArguments().getLong("noteId")
+        val noteId = requireArguments().getLong("noteId")
         val note = repo.getNote(noteId)
 
         if(note != null) {
-            binding.detailNoteTitle.text = note.title
+            this.note = note
+            binding.detailNoteTitle.setText(note.title)
             if(note.isCheckList){
                 binding.detailNoteBody.visibility = View.GONE
                 binding.detailNoteBodyRv.visibility = View.VISIBLE
                 binding.detailNoteBodyRv.adapter = NoteEntryRecyclerViewAdapter(note.body)
             } else {
-                binding.detailNoteBody.text = note.body.joinToString(separator = "\n")
+                binding.detailNoteBody.setText(note.body.joinToString(separator = "\n"))
             }
         }
 
@@ -61,6 +67,16 @@ class NoteDetailFragment : Fragment() {
                 return false
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(note != null) {
+            note!!.title = binding.detailNoteTitle.text.toString()
+            val body = binding.detailNoteBody.text.toString()
+            note!!.body = body.split("\n").map { s -> Line(s, false) }.toMutableList()
+            viewModel.updateNote(note!!)
+        }
     }
 
 }
