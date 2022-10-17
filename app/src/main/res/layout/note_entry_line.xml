@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/note_entry_line"
-        style="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/TextAppearance.Material3.BodyMedium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:checkMark="@drawable/ic_baseline_check_24"
