@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:background="@null"
-        android:checkMark="@drawable/ic_baseline_check_24"
         android:gravity="top"
         android:inputType="textMultiLine"
         android:hint="@string/dummy_note_body"
