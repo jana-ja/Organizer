@@ -50,6 +50,7 @@
             android:inputType="textMultiLine"
             android:importantForAutofill="no"
             android:hint="@string/dummy_note_body"
+            android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
