@@ -55,10 +55,23 @@ class Repository {
         val list = dummyNoteData.value
         if(list != null) {
             val oldNote = list.find { it.id == note.id }
-            val index = list.indexOf(oldNote)
-            list.removeAt(index)
-            list.add(index, note)
+            if(oldNote != null) {
+                val index = list.indexOf(oldNote)
+                list.removeAt(index)
+                list.add(index, note)
+                return
+            }
         }
+        val todoList = dummyTodoData.value
+        if(todoList != null) {
+            val oldNote = todoList.find { it.id == note.id }
+            if(oldNote != null) {
+                val index = todoList.indexOf(oldNote)
+                todoList.removeAt(index)
+                todoList.add(index, note)
+            }
+        }
+        // TODO handle error
     }
 
     companion object {
