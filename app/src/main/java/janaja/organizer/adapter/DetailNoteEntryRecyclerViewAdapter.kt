@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
@@ -17,6 +18,7 @@ class DetailNoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
     private lateinit var recyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val btnDel: Button = view.findViewById(R.id.detail_note_entry_del)
         val lineText: EditText = view.findViewById(R.id.detail_note_entry_line)
         val checkBox: CheckBox = view.findViewById(R.id.detail_note_entry_checkBox)
     }
@@ -57,6 +59,11 @@ class DetailNoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
                 holder.lineText.paintFlags =
                     holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
+        }
+
+        holder.btnDel.setOnClickListener {
+            if(dataset.size > 1)
+                removeLine(holder.layoutPosition)
         }
 
         holder.lineText.doAfterTextChanged {
