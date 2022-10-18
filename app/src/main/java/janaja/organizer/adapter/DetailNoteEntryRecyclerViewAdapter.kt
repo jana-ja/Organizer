@@ -21,11 +21,6 @@ class DetailNoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
         val checkBox: CheckBox = view.findViewById(R.id.detail_note_entry_checkBox)
     }
 
-    fun newLine() {
-        dataset.add(Line("", false))
-        notifyItemInserted(dataset.lastIndex)
-    }
-
     fun addLine(position: Int, line: String) {
         dataset.add(position, Line(line, false))
         notifyItemInserted(position)
@@ -65,19 +60,22 @@ class DetailNoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
         }
 
         holder.lineText.doAfterTextChanged {
-            var newText = it.toString()
-            if (it.toString().contains("\n")){
+            val newText = it.toString()
+            if (newText.contains("\n")){
                 // finish this line
-                newText = newText.replace("\n","")
-                holder.lineText.setText(newText)
+                val splitIndex = newText.indexOf("\n")
+                val frontText = newText.substring(0,splitIndex)
+                val backText = newText.substring(splitIndex + 1, newText.length)
+                holder.lineText.setText(frontText)
                 // add new Line
-                addLine(holder.layoutPosition + 1, "")
+                addLine(holder.layoutPosition + 1, backText)
             } else {
                 line.text = newText
             }
         }
 
         holder.itemView.requestFocus()
+        //holder.lineText.setSelection(holder.lineText.length())
     }
 
     override fun getItemCount(): Int {
