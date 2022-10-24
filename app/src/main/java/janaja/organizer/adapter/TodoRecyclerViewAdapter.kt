@@ -12,7 +12,7 @@ import janaja.organizer.R
 import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
 
-class ReminderRecyclerViewAdapter(dataset: MutableList<Note>, handler: ContextualAppBarHandler) : NoteRecyclerViewAdapter(dataset, handler) {
+class TodoRecyclerViewAdapter(dataset: MutableList<Note>, handler: ContextualAppBarHandler) : NoteRecyclerViewAdapter(dataset, handler) {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -30,7 +30,7 @@ class ReminderRecyclerViewAdapter(dataset: MutableList<Note>, handler: Contextua
         val onClick: (View) -> Unit = {
             val navController = holder.itemView.findNavController()
             navController.navigate(
-                HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(
+                HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment( // TODO nav to extra fragment
                     note.id
                 )
             )

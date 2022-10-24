@@ -6,7 +6,8 @@ data class Note(
     var body: MutableList<Line> = mutableListOf(Line("",false)),
     var isCheckList: Boolean = false,
     var categories: MutableList<Category> = mutableListOf(),
-    var isReminder: Boolean = false
+    var isTodo: Boolean = false,
+    var hasReminder: Boolean = false
 //    val duration: Long,
 //    val startDate: Date
 ) {

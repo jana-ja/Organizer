@@ -10,13 +10,13 @@ import janaja.organizer.R
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
-import janaja.organizer.databinding.ReminderCardviewHeaderBinding
+import janaja.organizer.databinding.TodoCardviewHeaderBinding
 
-class ReminderCardView(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
+class TodoCardView(context: Context, attrs: AttributeSet) : CardView(context, attrs) {
 
     private val gurki = "beste babe"
     private val binding: HomeCardviewBinding
-    private val headerBinding: ReminderCardviewHeaderBinding
+    private val headerBinding: TodoCardviewHeaderBinding
     private val contentBinding: NoteCardviewContentBinding
 
     init {
@@ -30,11 +30,11 @@ class ReminderCardView(context: Context, attrs: AttributeSet) : CardView(context
         // manage header
         headerBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.reminder_cardview_header,
+            R.layout.todo_cardview_header,
             binding.flHomeCardviewHeader,
             true
         )
-        headerBinding.tvReminderCardviewTitle.text = resources.getString(R.string.reminder_cardview_title)
+        headerBinding.tvTodoCardviewTitle.text = resources.getString(R.string.reminder_cardview_title)
 
         // manage content
         contentBinding = DataBindingUtil.inflate(

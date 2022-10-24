@@ -11,7 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.NoteRecyclerViewAdapter
-import janaja.organizer.adapter.ReminderRecyclerViewAdapter
+import janaja.organizer.adapter.TodoRecyclerViewAdapter
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
@@ -66,7 +66,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
             }
         }
         viewModel.reminders.observe(viewLifecycleOwner) { reminders ->
-            ReminderRecyclerViewAdapter(reminders, this).also {
+            TodoRecyclerViewAdapter(reminders, this).also {
                 binding.cvHomeReminders.setNoteRecyclerViewAdapter(it)
             }
         }
