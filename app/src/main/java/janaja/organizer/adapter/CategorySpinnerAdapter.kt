@@ -17,7 +17,7 @@ class CategorySpinnerAdapter(context: Context, @LayoutRes private val layoutReso
         return createViewFromResource(position, parent)
     }
 
-    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createViewFromResource(position, parent)
     }
 
