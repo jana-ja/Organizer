@@ -8,7 +8,7 @@ import janaja.organizer.data.model.Note
 class SharedViewModel : ViewModel() {
 
     val repository = Repository.getRepository()
-    val notes: LiveData<MutableList<Note>> = repository.dummyNoteData
+    val notes: LiveData<MutableList<Note>> = repository.dummyData
     val reminders: LiveData<MutableList<Note>> = repository.dummyTodoData
 
     fun deleteNotes(selected: List<Boolean>){
