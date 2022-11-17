@@ -8,15 +8,15 @@ class Repository {
 
 
     val dummyData: MutableLiveData<MutableList<Note>> = MutableLiveData(mutableListOf(
-        Note(0, "Title", mutableListOf(Line("Body"))),
-        Note(1, "Title Haha", mutableListOf(Line("ICh mache nOtiz"),Line("Super toll")),true),
-        Note(2, "Wow", mutableListOf(Line("GuNa"),Line("hehe"),Line("länger"))),
-        Note(3, "Kaufen", mutableListOf(Line("Spa"))),
-        Note(4, "Kaufen", mutableListOf(Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr"),Line("Spaghetti"),Line("Hände"),Line("Tomaten"),Line("brrrr"))),
-        Note(5, "Heute", mutableListOf(Line("Wasser trinken"), Line("Aufräumen")),true, isTodo = true),
-        Note(6, "Diese Woche", mutableListOf(Line("Sport"),Line("Lesen"), Line("Pflanzen gießen")),true, isTodo = true),
-        Note(7, "Diesen Monat", mutableListOf(Line("Putzen"),Line("Auto Check")),true, isTodo = true),
-        Note(8, "Backlog", mutableListOf(Line("Aussortieren")),true, isTodo = true),
+        Note(0, "Title", mutableListOf(Line(0,"Body"))),
+        Note(1, "Title Haha", mutableListOf(Line(1,"ICh mache nOtiz"),Line(2,"Super toll")),true),
+        Note(2, "Wow", mutableListOf(Line(3,"GuNa"),Line(4,"hehe"),Line(5,"länger"))),
+        Note(3, "Kaufen", mutableListOf(Line(6,"Spa"))),
+        Note(4, "Kaufen", mutableListOf(Line(7,"Spaghetti"),Line(8,"Hände"),Line(9,"Tomaten"),Line(10,"brrrr"),Line(11,"Spaghetti"),Line(12,"Hände"),Line(13,"Tomaten"),Line(14,"brrrr"))),
+        Note(5, "Heute", mutableListOf(Line(15,"Wasser trinken", repeat = true), Line(16,"Aufräumen")),true, isTodo = true),
+        Note(6, "Diese Woche", mutableListOf(Line(17,"Sport", repeat = true),Line(18,"Lesen"), Line(19,"Pflanzen gießen", repeat = true)),true, isTodo = true),
+        Note(7, "Diesen Monat", mutableListOf(Line(20,"Putzen", repeat = true),Line(21,"Auto Check", repeat = true)),true, isTodo = true),
+        Note(8, "Backlog", mutableListOf(Line(22,"Aussortieren")),true, isTodo = true),
     ))
 
     val dummyTodoData: MutableLiveData<MutableList<Note>> = MutableLiveData(dummyData.value!!.filter{ it.isTodo }.toMutableList())

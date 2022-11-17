@@ -59,4 +59,6 @@
     <color name="md_theme_dark_shadow">#000000</color>
     <color name="md_theme_dark_surfaceTint">#85CFFF</color>
     <color name="md_theme_dark_surfaceTintColor">#85CFFF</color>
+
+    <color name="android_default_disabled">#61000000</color>
 </resources>

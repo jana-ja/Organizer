@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/settings"
+        android:checkable="true"
+        android:contentDescription="todo category settings"
+        android:icon="@drawable/wrench"
+        app:showAsAction="ifRoom"
+        android:title="settings" />
+    <item
+        android:id="@+id/editable"
+        android:checkable="true"
+        android:contentDescription="is editable"
+        android:icon="@drawable/ic_baseline_lock_24"
+        app:showAsAction="ifRoom"
+        android:title="editable" />
+</menu>

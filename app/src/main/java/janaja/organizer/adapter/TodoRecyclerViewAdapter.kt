@@ -30,7 +30,7 @@ class TodoRecyclerViewAdapter(dataset: MutableList<Note>, handler: ContextualApp
         val onClick: (View) -> Unit = {
             val navController = holder.itemView.findNavController()
             navController.navigate(
-                HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment( // TODO nav to extra fragment
+                HomeFragmentDirections.actionHomeFragmentToTodoDetailFragment(
                     note.id
                 )
             )

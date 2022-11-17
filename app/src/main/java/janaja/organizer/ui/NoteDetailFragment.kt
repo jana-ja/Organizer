@@ -13,6 +13,7 @@ import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Line
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentNoteDetailBinding
+import kotlin.random.Random
 
 class NoteDetailFragment : Fragment() {
 
@@ -79,7 +80,8 @@ class NoteDetailFragment : Fragment() {
                 note!!.body = adapter.getAllLines()
             } else {
                 val body = binding.detailNoteBody.text.toString()
-                note!!.body = body.split("\n").map { s -> Line(s, false) }.toMutableList()
+                // TODO richtige ID
+                note!!.body = body.split("\n").map { s -> Line(Random.nextLong(),s, false) }.toMutableList()
             }
             viewModel.updateNote(note!!)
         }

@@ -2,7 +2,6 @@ package janaja.organizer.ui.home
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -109,15 +108,15 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
         }
 
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            when (item?.itemId) {
+            return when (item?.itemId) {
                 R.id.card_selected_menu_delete -> {
-                    Toast.makeText(requireContext(), "löschen", Toast.LENGTH_SHORT).show()
                     // TODO delete per ids, not indices
+                    // TODO bestätigung dialog
                     noteAdapter?.selected?.let { viewModel.deleteNotes(it) }
                     mode?.finish()
-                    return true
+                    true
                 }
-                else -> return false
+                else -> false
             }
         }
 

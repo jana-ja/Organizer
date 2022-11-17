@@ -17,21 +17,6 @@ class NoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) : RecyclerVie
         val checkBox: CheckBox = view.findViewById(R.id.note_entry_checkBox)
     }
 
-    fun newLine(){
-        dataset.add(Line("", false))
-        notifyItemInserted(dataset.lastIndex)
-    }
-
-    fun addItem(line: String){
-        dataset.add(Line(line, false))
-        notifyItemInserted(dataset.lastIndex)
-    }
-
-    fun removeitem(position: Int){
-        dataset.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val itemLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.note_entry_line, parent, false)

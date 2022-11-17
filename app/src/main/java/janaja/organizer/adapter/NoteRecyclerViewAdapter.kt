@@ -61,6 +61,7 @@ open class NoteRecyclerViewAdapter(open var dataset: MutableList<Note>, private 
         return dataset.size
     }
 
+    // called after dataset changed to display changes using DiffUtil
     fun updateList() {
         selected = MutableList(dataset.size){false}
         NoteDiffCallback(oldList, dataset).also{

@@ -11,10 +11,21 @@
         <action
             android:id="@+id/action_homeFragment_to_noteDetailFragment"
             app:destination="@id/noteDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_todoDetailFragment"
+            app:destination="@id/todoDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"
         android:name="janaja.organizer.ui.NoteDetailFragment"
+        android:label="@string/app_name">
+        <argument
+            android:name="noteId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/todoDetailFragment"
+        android:name="janaja.organizer.ui.TodoDetailFragment"
         android:label="@string/app_name">
         <argument
             android:name="noteId"
