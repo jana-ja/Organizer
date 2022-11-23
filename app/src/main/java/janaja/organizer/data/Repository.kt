@@ -19,6 +19,8 @@ class Repository {
         Note(8, "Backlog", mutableListOf(Line(22,"Aussortieren")),true, isTodo = true),
     ))
 
+    val dummyNoteData: MutableLiveData<MutableList<Note>> = MutableLiveData(dummyData.value!!.filter{ !it.isTodo }.toMutableList())
+
     val dummyTodoData: MutableLiveData<MutableList<Note>> = MutableLiveData(dummyData.value!!.filter{ it.isTodo }.toMutableList())
 
     fun getNote(id: Long): Note? {
