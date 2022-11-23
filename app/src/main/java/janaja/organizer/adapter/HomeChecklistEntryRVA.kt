@@ -1,6 +1,7 @@
 package janaja.organizer.adapter
 
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.Line
 
-class HomeChecklistEntryRVA(var dataset: MutableList<Line>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>(){
+class HomeChecklistEntryRVA(var dataset: MutableList<Line>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lineText: TextView = view.findViewById(R.id.note_entry_line)
@@ -27,7 +28,7 @@ class HomeChecklistEntryRVA(var dataset: MutableList<Line>) : RecyclerView.Adapt
         val line = dataset[position]
         holder.lineText.text = line.text
         holder.checkBox.isChecked = line.isChecked
-        if(line.isChecked){
+        if (line.isChecked) {
             holder.lineText.paintFlags = holder.lineText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         } else {
             holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
@@ -35,11 +36,17 @@ class HomeChecklistEntryRVA(var dataset: MutableList<Line>) : RecyclerView.Adapt
 
         holder.checkBox.setOnClickListener {
             line.isChecked = holder.checkBox.isChecked
-            if(holder.checkBox.isChecked){
+            if (holder.checkBox.isChecked) {
                 holder.lineText.paintFlags = holder.lineText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             } else {
                 holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
+        }
+
+        // TODO only for todos, maybe make note and todo lines distinct
+        //  could lead to problems when converting todonote to a normal note
+        if (line.repeat) {
+            holder.lineText.setTypeface(null, Typeface.BOLD)
         }
     }
 
