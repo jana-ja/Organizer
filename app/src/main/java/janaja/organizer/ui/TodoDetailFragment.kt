@@ -11,10 +11,8 @@ import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
 import janaja.organizer.adapter.DetailTodoEntryRVA
 import janaja.organizer.data.Repository
-import janaja.organizer.data.model.Line
-import janaja.organizer.data.model.Note
+import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.FragmentNoteDetailBinding
-import kotlin.random.Random
 
 class TodoDetailFragment : Fragment() {
 
@@ -22,8 +20,8 @@ class TodoDetailFragment : Fragment() {
     private val repo = Repository.getRepository()
     private lateinit var binding: FragmentNoteDetailBinding
 
-    // TODO lateinit and null type not possible. how to handle porperly?
-    private var note: Note? = null
+    // TODO lateinit and null type not possible. how to handle properly?
+    private var note: Todo? = null
     private lateinit var adapter: DetailTodoEntryRVA
 
     override fun onCreateView(
@@ -32,8 +30,8 @@ class TodoDetailFragment : Fragment() {
     ): View {
         binding = FragmentNoteDetailBinding.inflate(inflater)
 
-        val noteId = requireArguments().getLong("noteId")
-        val note = repo.getNote(noteId)
+        val noteId = requireArguments().getLong("todoId")
+        val note = repo.getTodo(noteId)
 
         if (note != null) {
             this.note = note
@@ -102,14 +100,9 @@ class TodoDetailFragment : Fragment() {
         super.onStop()
         if (note != null) {
             note!!.title = binding.detailNoteTitle.text.toString()
-            if (note!!.isCheckList) {
-                note!!.body = adapter.getAllLines()
-            } else {
-                val body = binding.detailNoteBody.text.toString()
-                // TODO richtige ID
-                note!!.body = body.split("\n").map { s -> Line(Random.nextLong(), s, false) }.toMutableList()
-            }
-            viewModel.updateNote(note!!)
+            note!!.body = adapter.getAllLines()
+
+            viewModel.updateTodo(note!!)
         }
     }
 

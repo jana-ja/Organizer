@@ -20,7 +20,7 @@ import janaja.organizer.ui.home.HomeFragmentDirections
 import janaja.organizer.util.NoteDiffCallback
 import kotlinx.coroutines.*
 
-open class HomeNoteRVA(open var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :
+open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :
     RecyclerView.Adapter<HomeNoteRVA.ItemViewHolder>() {
 
     var oldList = dataset.toList()
@@ -72,7 +72,7 @@ open class HomeNoteRVA(open var dataset: MutableList<Note>, private val handler:
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    open fun manageClickListeners(holder: ItemViewHolder, position: Int) {
+    fun manageClickListeners(holder: ItemViewHolder, position: Int) {
         val note = dataset[position]
 
         val onClick: (View) -> Unit = {

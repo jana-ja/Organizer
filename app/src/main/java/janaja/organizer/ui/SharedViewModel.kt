@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Note
+import janaja.organizer.data.model.Todo
 
 class SharedViewModel : ViewModel() {
 
     val repository = Repository.getRepository()
     val notes: LiveData<MutableList<Note>> = repository.dummyNoteData
-    val reminders: LiveData<MutableList<Note>> = repository.dummyTodoData
+    val reminders: LiveData<MutableList<Todo>> = repository.dummyTodoData
 
     fun deleteNotes(selected: List<Boolean>){
         val indices: MutableList<Int> = mutableListOf()
@@ -24,6 +25,10 @@ class SharedViewModel : ViewModel() {
 
     fun updateNote(note: Note){
         repository.updateNote(note)
+    }
+
+    fun updateTodo(todo: Todo) {
+        repository.updateTodo(todo)
     }
 
 }
