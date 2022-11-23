@@ -1,8 +1,7 @@
-package janaja.organizer.adapter
+package janaja.organizer.util
 
 import androidx.recyclerview.widget.DiffUtil
 import janaja.organizer.data.model.Line
-import janaja.organizer.data.model.Note
 
 class LineDiffCallback(private val oldList: List<Line>, private val newList: List<Line>): DiffUtil.Callback() {
 

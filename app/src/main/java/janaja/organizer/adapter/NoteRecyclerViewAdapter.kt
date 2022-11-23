@@ -17,6 +17,7 @@ import com.google.android.material.card.MaterialCardView
 import janaja.organizer.R
 import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
+import janaja.organizer.util.NoteDiffCallback
 import kotlinx.coroutines.*
 
 open class NoteRecyclerViewAdapter(open var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :

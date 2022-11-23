@@ -1,4 +1,4 @@
-package janaja.organizer.adapter
+package janaja.organizer.util
 
 import androidx.recyclerview.widget.DiffUtil
 import janaja.organizer.data.model.Note

@@ -1,7 +1,6 @@
 package janaja.organizer.adapter
 
 import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.Line
+import janaja.organizer.util.LineDiffCallback
 import kotlin.random.Random
 
 class DetailTodoEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
