@@ -9,21 +9,21 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
-import janaja.organizer.adapter.NoteRecyclerViewAdapter
-import janaja.organizer.adapter.TodoRecyclerViewAdapter
+import janaja.organizer.adapter.HomeNoteRVA
+import janaja.organizer.adapter.HomeTodoRVA
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
 import kotlin.random.Random
 
-class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler {
+class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: SharedViewModel by activityViewModels()
     private var selectCount: Int? = null
 
     var actionMode: ActionMode? = null
-    var noteAdapter: NoteRecyclerViewAdapter? = null
+    var noteAdapter: HomeNoteRVA? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +57,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
 
         viewModel.notes.observe(viewLifecycleOwner){ notes ->
             if(noteAdapter == null) {
-                noteAdapter = NoteRecyclerViewAdapter(notes, this).also {
+                noteAdapter = HomeNoteRVA(notes, this).also {
                     binding.cvHomeNotes.setNoteRecyclerViewAdapter(it)
                 }
             } else {
@@ -65,7 +65,7 @@ class HomeFragment : Fragment(), NoteRecyclerViewAdapter.ContextualAppBarHandler
             }
         }
         viewModel.reminders.observe(viewLifecycleOwner) { reminders ->
-            TodoRecyclerViewAdapter(reminders, this).also {
+            HomeTodoRVA(reminders, this).also {
                 binding.cvHomeReminders.setNoteRecyclerViewAdapter(it)
             }
         }

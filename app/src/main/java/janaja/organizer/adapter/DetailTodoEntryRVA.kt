@@ -1,6 +1,7 @@
 package janaja.organizer.adapter
 
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,8 @@ import janaja.organizer.data.model.Line
 import janaja.organizer.util.LineDiffCallback
 import kotlin.random.Random
 
-class DetailTodoEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
-    RecyclerView.Adapter<DetailTodoEntryRecyclerViewAdapter.ItemViewHolder>() {
+class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
+    RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>() {
 
     private lateinit var recyclerView: RecyclerView
     var editable: Boolean = false
@@ -101,15 +102,19 @@ class DetailTodoEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
         holder.repeat.setOnClickListener {
             if (line.repeat) {
                 holder.repeat.setImageResource(R.drawable.repeat_off)
+                holder.lineText.setTypeface(null, Typeface.NORMAL)
             } else {
                 holder.repeat.setImageResource(R.drawable.repeat)
+                holder.lineText.setTypeface(null, Typeface.BOLD)
             }
             line.repeat = !line.repeat
             updateList()
         }
 
-        if (!line.repeat)
-            holder.repeat.setImageResource(R.drawable.repeat_off)
+        if (line.repeat) {
+            holder.repeat.setImageResource(R.drawable.repeat)
+            holder.lineText.setTypeface(null, Typeface.BOLD)
+        }
 
         if (line.repeat && !editable) {
             // not editable

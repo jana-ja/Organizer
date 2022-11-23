@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.Line
 
-class NoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) : RecyclerView.Adapter<NoteEntryRecyclerViewAdapter.ItemViewHolder>(){
+class HomeChecklistEntryRVA(var dataset: MutableList<Line>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>(){
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lineText: TextView = view.findViewById(R.id.note_entry_line)

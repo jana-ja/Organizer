@@ -9,8 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
-import janaja.organizer.adapter.DetailNoteEntryRecyclerViewAdapter
-import janaja.organizer.adapter.DetailTodoEntryRecyclerViewAdapter
+import janaja.organizer.adapter.DetailTodoEntryRVA
 import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Line
 import janaja.organizer.data.model.Note
@@ -25,7 +24,7 @@ class TodoDetailFragment : Fragment() {
 
     // TODO lateinit and null type not possible. how to handle porperly?
     private var note: Note? = null
-    private lateinit var adapter: DetailTodoEntryRecyclerViewAdapter
+    private lateinit var adapter: DetailTodoEntryRVA
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +41,7 @@ class TodoDetailFragment : Fragment() {
             // todos are always checklists
             binding.detailNoteBody.visibility = View.GONE
             binding.detailNoteBodyRv.visibility = View.VISIBLE
-            adapter = DetailTodoEntryRecyclerViewAdapter(note.body)
+            adapter = DetailTodoEntryRVA(note.body)
             binding.detailNoteBodyRv.adapter = adapter
         }
 
@@ -65,11 +64,11 @@ class TodoDetailFragment : Fragment() {
                         if (menuItem.isChecked) {
                             // is editable, make not editable
                             makeNotEditable()
-                            menuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_lock_24);
+                            menuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_lock_24)
                         } else {
                             // is not editable, make editable
                             makeEditable()
-                            menuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_lock_open_24);
+                            menuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_lock_open_24)
                         }
                         menuItem.isChecked = !menuItem.isChecked
                         return true

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
-import janaja.organizer.adapter.DetailNoteEntryRecyclerViewAdapter
+import janaja.organizer.adapter.DetailChecklistEntryRVA
 import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Line
 import janaja.organizer.data.model.Note
@@ -22,7 +22,7 @@ class NoteDetailFragment : Fragment() {
     private lateinit var binding: FragmentNoteDetailBinding
     // TODO lateinit and null type not possible. how to handle porperly?
     private var note: Note? = null
-    private lateinit var adapter: DetailNoteEntryRecyclerViewAdapter
+    private lateinit var adapter: DetailChecklistEntryRVA
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +39,7 @@ class NoteDetailFragment : Fragment() {
             if(note.isCheckList){
                 binding.detailNoteBody.visibility = View.GONE
                 binding.detailNoteBodyRv.visibility = View.VISIBLE
-                adapter = DetailNoteEntryRecyclerViewAdapter(note.body)
+                adapter = DetailChecklistEntryRVA(note.body)
                 binding.detailNoteBodyRv.adapter = adapter
             } else {
                 binding.detailNoteBody.setText(note.body.joinToString(separator = "\n"))

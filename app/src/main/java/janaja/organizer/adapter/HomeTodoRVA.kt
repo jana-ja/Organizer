@@ -12,7 +12,7 @@ import janaja.organizer.R
 import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
 
-class TodoRecyclerViewAdapter(dataset: MutableList<Note>, handler: ContextualAppBarHandler) : NoteRecyclerViewAdapter(dataset, handler) {
+class HomeTodoRVA(dataset: MutableList<Note>, handler: ContextualAppBarHandler) : HomeNoteRVA(dataset, handler) {
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

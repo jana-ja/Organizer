@@ -13,8 +13,8 @@ import janaja.organizer.R
 import janaja.organizer.data.model.Line
 import kotlin.random.Random
 
-class DetailNoteEntryRecyclerViewAdapter(var dataset: MutableList<Line>) :
-    RecyclerView.Adapter<DetailNoteEntryRecyclerViewAdapter.ItemViewHolder>() {
+class DetailChecklistEntryRVA(var dataset: MutableList<Line>) :
+    RecyclerView.Adapter<DetailChecklistEntryRVA.ItemViewHolder>() {
 
     private lateinit var recyclerView: RecyclerView
 

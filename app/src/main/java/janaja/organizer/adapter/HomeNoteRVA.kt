@@ -20,8 +20,8 @@ import janaja.organizer.ui.home.HomeFragmentDirections
 import janaja.organizer.util.NoteDiffCallback
 import kotlinx.coroutines.*
 
-open class NoteRecyclerViewAdapter(open var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :
-    RecyclerView.Adapter<NoteRecyclerViewAdapter.ItemViewHolder>() {
+open class HomeNoteRVA(open var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :
+    RecyclerView.Adapter<HomeNoteRVA.ItemViewHolder>() {
 
     var oldList = dataset.toList()
     var selected: MutableList<Boolean> = MutableList(dataset.size){false}
@@ -48,7 +48,7 @@ open class NoteRecyclerViewAdapter(open var dataset: MutableList<Note>, private 
         if (note.isCheckList) {
             holder.body.visibility = View.GONE
             holder.bodyRv.visibility = View.VISIBLE
-            holder.bodyRv.adapter = NoteEntryRecyclerViewAdapter(note.body)
+            holder.bodyRv.adapter = HomeChecklistEntryRVA(note.body)
         } else {
             holder.body.text = note.body.joinToString(separator = "\n")
         }

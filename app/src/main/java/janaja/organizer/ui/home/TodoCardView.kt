@@ -7,7 +7,7 @@ import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import janaja.organizer.R
-import janaja.organizer.adapter.NoteRecyclerViewAdapter
+import janaja.organizer.adapter.HomeNoteRVA
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.TodoCardviewHeaderBinding
@@ -50,7 +50,7 @@ class TodoCardView(context: Context, attrs: AttributeSet) : CardView(context, at
     }
 
 
-    fun setNoteRecyclerViewAdapter(adapter: NoteRecyclerViewAdapter) {
+    fun setNoteRecyclerViewAdapter(adapter: HomeNoteRVA) {
         contentBinding.rvHomeCardviewNotes.adapter = adapter
     }
 }
