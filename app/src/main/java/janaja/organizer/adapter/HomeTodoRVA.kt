@@ -1,9 +1,9 @@
 package janaja.organizer.adapter
 
 import android.annotation.SuppressLint
-import android.app.ActionBar.LayoutParams
 import android.os.SystemClock
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
@@ -16,48 +16,45 @@ import janaja.organizer.ui.home.HomeFragmentDirections
 import janaja.organizer.util.TodoDiffCallback
 
 class HomeTodoRVA(var dataset: MutableList<Todo>) :
-    RecyclerView.Adapter<HomeTodoRVA.ItemViewHolder>()  {
+    RecyclerView.Adapter<HomeTodoRVA.ItemViewHolder>() {
 
     var oldList = dataset.toList()
-    var selected: MutableList<Boolean> = MutableList(dataset.size){false}
+    var selected: MutableList<Boolean> = MutableList(dataset.size) { false }
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
-        selected = MutableList(dataset.size){false}
-        TodoDiffCallback(oldList, dataset).also{
+        selected = MutableList(dataset.size) { false }
+        TodoDiffCallback(oldList, dataset).also {
             DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
         }
         oldList = dataset.toList()
     }
+
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.note_title)
-        val body: TextView = view.findViewById(R.id.note_body)
-        val bodyRv: RecyclerView = view.findViewById(R.id.note_body_rv)
-        val card: MaterialCardView = view.findViewById(R.id.note_card)
-        val noteCl: ConstraintLayout = view.findViewById(R.id.note_cl)
+        val title: TextView = view.findViewById(R.id.todo_title)
+        val bodyRv: RecyclerView = view.findViewById(R.id.todo_body_rv)
+        val card: MaterialCardView = view.findViewById(R.id.todo_card)
+        val scollingLl: LinearLayout = view.findViewById(R.id.todo_scrolling_ll)
+        val addLine: ConstraintLayout = view.findViewById(R.id.add_line_cl)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val itemLayout = LayoutInflater.from(parent.context)
-            .inflate(R.layout.note_list_item, parent, false)
+            .inflate(R.layout.todo_list_item, parent, false)
         return ItemViewHolder(itemLayout)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val note = dataset[position]
-        holder.title.text = note.title
+        val todo = dataset[position]
+        holder.title.text = todo.title
 
-            holder.body.visibility = View.GONE
-            holder.bodyRv.visibility = View.VISIBLE
-            holder.bodyRv.adapter = HomeChecklistEntryRVA(note.body)
+        val subadapter = HomeChecklistEntryRVA(todo.body)
+        holder.bodyRv.adapter = subadapter
 
-
-        holder.card.layoutParams.width = holder.itemView.resources.getDimension(R.dimen.reminder_card_width).toInt()
-        holder.card.layoutParams.height = LayoutParams.MATCH_PARENT
-        holder.noteCl.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_PARENT
-        holder.bodyRv.layoutParams.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-
-        // recyclerview and its parent cardview should have the same behaviour
+        holder.addLine.setOnClickListener {
+             subadapter.addLine(todo.body.size, "")
+        }
+        // recyclerview, nestedscrollview and its parent cardview should have the same behaviour
         manageClickListeners(holder, position)
 
     }
@@ -95,6 +92,10 @@ class HomeTodoRVA(var dataset: MutableList<Todo>) :
             }
             true
         }
+
+        // handle scrollview
+        holder.scollingLl.setOnClickListener(onClick)
+        // TODO linear layout does not fill scroll layout so there is an area that is not clickable
     }
 
 }

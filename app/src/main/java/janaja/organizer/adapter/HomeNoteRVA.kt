@@ -28,11 +28,11 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
     private lateinit var mRecyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.note_title)
+        val title: TextView = view.findViewById(R.id.todo_title)
         val body: TextView = view.findViewById(R.id.note_body)
-        val bodyRv: RecyclerView = view.findViewById(R.id.note_body_rv)
-        val card: MaterialCardView = view.findViewById(R.id.note_card)
-        val noteCl: ConstraintLayout = view.findViewById(R.id.note_cl)
+        val bodyRv: RecyclerView = view.findViewById(R.id.todo_body_rv)
+        val card: MaterialCardView = view.findViewById(R.id.todo_card)
+        val noteCl: ConstraintLayout = view.findViewById(R.id.todo_cl)
     }
     var job: Job? = null
 

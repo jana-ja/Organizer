@@ -10,12 +10,19 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.Line
+import kotlin.random.Random
 
 class HomeChecklistEntryRVA(var dataset: MutableList<Line>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lineText: TextView = view.findViewById(R.id.note_entry_line)
         val checkBox: CheckBox = view.findViewById(R.id.note_entry_checkBox)
+    }
+
+    fun addLine(position: Int, line: String) {
+        // TODO richtige ID
+        dataset.add(position, Line(Random.nextLong(), line, false))
+        notifyItemInserted(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
