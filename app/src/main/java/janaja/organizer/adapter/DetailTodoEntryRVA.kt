@@ -21,7 +21,6 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
     RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>() {
 
     private lateinit var recyclerView: RecyclerView
-    var editable: Boolean = false
 
     private var oldList: List<Line> = dataset.map { it.copyLine() }
 
@@ -116,13 +115,8 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
             holder.lineText.setTypeface(null, Typeface.BOLD)
         }
 
-        if (line.repeat && !editable) {
-            // not editable
-            holder.lineText.isEnabled = false
-            holder.btnDel.isEnabled = false
-        } else {
-            holder.itemView.requestFocus()
-        }
+        holder.itemView.requestFocus()
+
     }
 
     override fun getItemCount(): Int {

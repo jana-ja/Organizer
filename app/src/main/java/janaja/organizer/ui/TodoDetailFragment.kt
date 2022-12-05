@@ -2,7 +2,6 @@ package janaja.organizer.ui
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -58,17 +57,8 @@ class TodoDetailFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
-                    R.id.editable -> {
-                        if (menuItem.isChecked) {
-                            // is editable, make not editable
-                            makeNotEditable()
-                            menuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_lock_24)
-                        } else {
-                            // is not editable, make editable
-                            makeEditable()
-                            menuItem.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_lock_open_24)
-                        }
-                        menuItem.isChecked = !menuItem.isChecked
+                    R.id.menu_todo_detail_settings -> {
+                        // todo
                         return true
                     }
                     else -> return false
@@ -76,25 +66,9 @@ class TodoDetailFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-        makeNotEditable()
-    }
-
-    private fun makeEditable(){
-        binding.detailNoteTitle.isEnabled = true
-        // TODO update all necessary lines so rv adapter gets notified
-        adapter.dataset.forEach { line -> line.notify = !line.notify }
-        adapter.editable = true
-        adapter.updateList()
 
     }
 
-    private fun makeNotEditable(){
-        binding.detailNoteTitle.isEnabled = false
-// TODO update all necessary lines so rv adapter gets notified
-        adapter.dataset.forEach { line -> line.notify = !line.notify }
-        adapter.editable = false
-        adapter.updateList()
-    }
 
     override fun onStop() {
         super.onStop()
