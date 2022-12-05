@@ -3,9 +3,7 @@ package janaja.organizer.adapter
 import android.annotation.SuppressLint
 import android.os.SystemClock
 import android.view.*
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,11 +13,11 @@ import janaja.organizer.data.model.Todo
 import janaja.organizer.ui.home.HomeFragmentDirections
 import janaja.organizer.util.TodoDiffCallback
 
-class HomeTodoRVA(var dataset: MutableList<Todo>) :
+class HomeTodoRVA(private var dataset: MutableList<Todo>) :
     RecyclerView.Adapter<HomeTodoRVA.ItemViewHolder>() {
 
-    var oldList = dataset.toList()
-    var selected: MutableList<Boolean> = MutableList(dataset.size) { false }
+    private var oldList = dataset.toList()
+    private var selected: MutableList<Boolean> = MutableList(dataset.size) { false }
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
@@ -34,8 +32,6 @@ class HomeTodoRVA(var dataset: MutableList<Todo>) :
         val title: TextView = view.findViewById(R.id.todo_title)
         val bodyRv: RecyclerView = view.findViewById(R.id.todo_body_rv)
         val card: MaterialCardView = view.findViewById(R.id.todo_card)
-        val scollingLl: LinearLayout = view.findViewById(R.id.todo_scrolling_ll)
-        val addLine: ConstraintLayout = view.findViewById(R.id.add_line_cl)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -51,10 +47,7 @@ class HomeTodoRVA(var dataset: MutableList<Todo>) :
         val subadapter = HomeChecklistEntryRVA(todo.body)
         holder.bodyRv.adapter = subadapter
 
-        holder.addLine.setOnClickListener {
-             subadapter.addLine(todo.body.size, "")
-        }
-        // recyclerview, nestedscrollview and its parent cardview should have the same behaviour
+        // recyclerview and its parent card view should have the same behaviour
         manageClickListeners(holder, position)
 
     }
@@ -76,7 +69,7 @@ class HomeTodoRVA(var dataset: MutableList<Todo>) :
             )
         }
 
-        // handle cardview
+        // handle card view
         holder.card.setOnClickListener(onClick)
 
         // handle recyclerview
@@ -92,10 +85,5 @@ class HomeTodoRVA(var dataset: MutableList<Todo>) :
             }
             true
         }
-
-        // handle scrollview
-        holder.scollingLl.setOnClickListener(onClick)
-        // TODO linear layout does not fill scroll layout so there is an area that is not clickable
     }
-
 }
