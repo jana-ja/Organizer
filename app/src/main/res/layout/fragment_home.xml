@@ -25,15 +25,18 @@
             android:id="@+id/cv_home_reminders"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/cv_home_decisions"
-            app:layout_constraintTop_toBottomOf="@+id/cv_home_notes" />
-
-        <janaja.organizer.ui.home.DecisionCardView
-            android:id="@+id/cv_home_decisions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_home_reminders"/>
+            app:layout_constraintTop_toBottomOf="@+id/cv_home_notes" />
+        <!--            app:layout_constraintBottom_toTopOf="@+id/cv_home_decisions"-->
+
+
+<!--        <janaja.organizer.ui.home.DecisionCardView-->
+<!--            android:id="@+id/cv_home_decisions"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/cv_home_reminders"/>-->
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
