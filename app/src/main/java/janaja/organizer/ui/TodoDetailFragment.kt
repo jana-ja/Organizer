@@ -103,21 +103,6 @@ class TodoDetailFragment : Fragment(), TodoDetailCallback {
         // i guess its because the new viewholders view is not finished
         // even though soft keyboard is also not shown when calling this function from the recyclerviewadapter but using a view from this fragment so??
         // TODO further testing on slow devices
-//        lifecycleScope.launch {
-//            delay(100)
-//            withContext(Dispatchers.Main) {
-//                if (view.requestFocus()) {
-//                    val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                    val whateverthisreturns = imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT, object : ResultReceiver(null) {
-//                        override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
-//                            super.onReceiveResult(resultCode, resultData)
-//                            val b = 3
-//                        }
-//                    })
-//                }
-//            }
-//        }
-
     }
 
 }
