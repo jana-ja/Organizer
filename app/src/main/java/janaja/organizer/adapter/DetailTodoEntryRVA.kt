@@ -5,7 +5,6 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
@@ -15,29 +14,33 @@ import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.Line
 import janaja.organizer.util.LineDiffCallback
+import janaja.organizer.util.TodoDetailCallback
 import kotlin.random.Random
 
-class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
+class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInterface: TodoDetailCallback) :
     RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>() {
 
     private lateinit var recyclerView: RecyclerView
 
     private var oldList: List<Line> = dataset.map { it.copyLine() }
 
+    private var insert = false
+
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val btnDel: Button = view.findViewById(R.id.detail_todo_entry_del)
+        val btnDel: ImageButton = view.findViewById(R.id.detail_todo_entry_del)
         val lineText: EditText = view.findViewById(R.id.detail_todo_entry_line)
         val checkBox: CheckBox = view.findViewById(R.id.detail_todo_entry_checkBox)
         val repeat: ImageButton = view.findViewById(R.id.detail_todo_entry_repeat)
     }
 
-    fun addLine(position: Int, line: String) {
+    fun addLine(position: Int = dataset.size, line: String = "") {
+        insert = true
         // TODO richtige ID
         dataset.add(position, Line(Random.nextLong(), line, false))
         notifyItemInserted(position)
     }
 
-    fun removeLine(position: Int) {
+    private fun removeLine(position: Int) {
         dataset.removeAt(position)
         notifyItemRemoved(position)
     }
@@ -58,7 +61,11 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val line = dataset[position]
+
+        // display text content
         holder.lineText.setText(line.text)
+
+        // display checkbox state
         holder.checkBox.isChecked = line.isChecked
         if (line.isChecked) {
             holder.lineText.paintFlags = holder.lineText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
@@ -67,11 +74,19 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
                 holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
 
+        // display repeat state
+        if (line.repeat) {
+            holder.repeat.setImageResource(R.drawable.repeat)
+            holder.lineText.setTypeface(null, Typeface.BOLD)
+        }
+
+        // remove line on button click
         holder.btnDel.setOnClickListener {
             if (dataset.size > 1)
                 removeLine(holder.layoutPosition)
         }
 
+        // insert new line on enter
         holder.lineText.doAfterTextChanged {
             val newText = it.toString()
             if (newText.contains("\n")) {
@@ -87,6 +102,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
             }
         }
 
+        // toggle checkbox on click
         holder.checkBox.setOnClickListener {
             line.isChecked = holder.checkBox.isChecked
             if (holder.checkBox.isChecked) {
@@ -98,6 +114,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
             }
         }
 
+        // toggle repeat on click
         holder.repeat.setOnClickListener {
             if (line.repeat) {
                 holder.repeat.setImageResource(R.drawable.repeat_off)
@@ -107,15 +124,14 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>) :
                 holder.lineText.setTypeface(null, Typeface.BOLD)
             }
             line.repeat = !line.repeat
-            updateList()
+            //updateList()
         }
 
-        if (line.repeat) {
-            holder.repeat.setImageResource(R.drawable.repeat)
-            holder.lineText.setTypeface(null, Typeface.BOLD)
+        // if this line is inserted as new line, request focus and show keyboard
+        if(insert) {
+            callbackInterface.showSoftKeyboard(holder.lineText)
+            insert = false
         }
-
-        holder.itemView.requestFocus()
 
     }
 

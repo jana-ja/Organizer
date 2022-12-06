@@ -4,14 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <Button
+    <ImageButton
         android:id="@+id/detail_todo_entry_del"
         style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
-        android:drawableTint="?attr/colorOnBackground"
-        app:icon="@drawable/ic_baseline_close_24"
+        app:srcCompat="@drawable/ic_baseline_close_24"
         app:iconGravity="textStart"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
