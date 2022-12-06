@@ -3,6 +3,7 @@ package janaja.organizer.adapter
 import android.annotation.SuppressLint
 import android.os.SystemClock
 import android.view.*
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
@@ -30,6 +31,7 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.todo_title)
+        val addButton: ImageButton = view.findViewById(R.id.todo_add_btn)
         val bodyRv: RecyclerView = view.findViewById(R.id.todo_body_rv)
         val card: MaterialCardView = view.findViewById(R.id.todo_card)
     }
@@ -44,11 +46,10 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
         val todo = dataset[position]
         holder.title.text = todo.title
 
-        val subadapter = HomeChecklistEntryRVA(todo.body)
-        holder.bodyRv.adapter = subadapter
+        holder.bodyRv.adapter = HomeChecklistEntryRVA(todo.body)
 
         // recyclerview and its parent card view should have the same behaviour
-        manageClickListeners(holder, position)
+        manageNavigationClickListeners(holder, position)
 
     }
 
@@ -57,7 +58,7 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    fun manageClickListeners(holder: ItemViewHolder, position: Int) {
+    fun manageNavigationClickListeners(holder: ItemViewHolder, position: Int) {
         val note = dataset[position]
 
         val onClick: (View) -> Unit = {
@@ -84,6 +85,16 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
                 }
             }
             true
+        }
+
+        // handle add button
+        holder.addButton.setOnClickListener{
+            val navController = holder.itemView.findNavController()
+            navController.navigate(
+                HomeFragmentDirections.actionHomeFragmentToTodoDetailFragment(
+                    note.id, true
+                )
+            )
         }
     }
 }

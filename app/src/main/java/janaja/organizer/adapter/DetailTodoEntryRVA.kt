@@ -25,6 +25,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInt
     private var oldList: List<Line> = dataset.map { it.copyLine() }
 
     private var insert = false
+    private var insertEnd = false
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val btnDel: ImageButton = view.findViewById(R.id.detail_todo_entry_del)
@@ -38,6 +39,11 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInt
         // TODO richtige ID
         dataset.add(position, Line(Random.nextLong(), line, false))
         notifyItemInserted(position)
+    }
+
+    fun addLineEnd(){
+        insertEnd = true
+        addLine()
     }
 
     private fun removeLine(position: Int) {
@@ -128,9 +134,14 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInt
         }
 
         // if this line is inserted as new line, request focus and show keyboard
+        // case A: insert not at the end (insertEnd is false)
+        // case B: insert at the end and this item is at the end
         if(insert) {
-            callbackInterface.showSoftKeyboard(holder.lineText)
-            insert = false
+            if(!insertEnd || position == dataset.lastIndex) {
+                callbackInterface.showSoftKeyboard(holder.lineText)
+                insert = false
+                insertEnd = false
+            }
         }
 
     }

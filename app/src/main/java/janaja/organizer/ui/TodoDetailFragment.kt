@@ -76,6 +76,11 @@ class TodoDetailFragment : Fragment(), TodoDetailCallback {
         binding.addLineCl.setOnClickListener {
             adapter.addLine()
         }
+
+        // is true when navigation here from home screen add button
+        val newLine = requireArguments().getBoolean("newLine")
+        if(newLine)
+            adapter.addLineEnd()
     }
 
     override fun onStop() {

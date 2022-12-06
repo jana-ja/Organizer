@@ -30,5 +30,9 @@
         <argument
             android:name="todoId"
             app:argType="long" />
+        <argument
+            android:name="newLine"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
 </navigation>
