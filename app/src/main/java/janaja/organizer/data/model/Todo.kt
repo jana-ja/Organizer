@@ -33,18 +33,18 @@ data class Todo(
             // then go back one step
             TimePeriod.DAYS -> {
                 while(lastResetTime!!.isBefore(now))
-                    lastResetTime!!.plusDays(x.toLong())
-                lastResetTime!!.minusDays(x.toLong())
+                    lastResetTime = lastResetTime!!.plusDays(x.toLong())
+                lastResetTime = lastResetTime!!.minusDays(x.toLong())
             }
             TimePeriod.WEEKS -> {
                 while(lastResetTime!!.isBefore(now))
-                    lastResetTime!!.plusWeeks(x.toLong())
-                lastResetTime!!.minusWeeks(x.toLong())
+                    lastResetTime = lastResetTime!!.plusWeeks(x.toLong())
+                lastResetTime = lastResetTime!!.minusWeeks(x.toLong())
             }
             TimePeriod.MONTHS -> {
                 while(lastResetTime!!.isBefore(now))
-                    lastResetTime!!.plusMonths(x.toLong())
-                lastResetTime!!.minusMonths(x.toLong())
+                    lastResetTime = lastResetTime!!.plusMonths(x.toLong())
+                lastResetTime = lastResetTime!!.minusMonths(x.toLong())
             }
             else -> return false
         }
