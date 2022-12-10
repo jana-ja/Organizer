@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/todoDetailFragment"
-        android:name="janaja.organizer.ui.TodoDetailFragment"
+        android:name="janaja.organizer.ui.todo.TodoDetailFragment"
         android:label="@string/app_name">
         <argument
             android:name="todoId"
