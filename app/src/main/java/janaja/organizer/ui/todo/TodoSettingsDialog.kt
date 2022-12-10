@@ -19,10 +19,22 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
-        val builder = AlertDialog.Builder(requireActivity())
-
         binding = DialogTodoSettingsBinding.inflate(requireActivity().layoutInflater)
 
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(binding.root)
+            .setTitle(R.string.todo_settings_title)
+        val dialog = builder.create()
+
+        // dialog buttons
+        binding.btnPos.setOnClickListener {
+            if (saveWithInput())
+                dialog.dismiss()
+        }
+        binding.btnNeg.setOnClickListener {
+            dialog.cancel()
+
+        }
         // checkbox radio group
         binding.cbDays.setOnClickListener {
             if (!binding.cbDays.isChecked) {
@@ -55,16 +67,6 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
             }
         }
 
-        // dialog buttons
-        builder.setView(binding.root)
-            .setPositiveButton(R.string.apply_button) { dialog, id ->
-                saveWithInput()
-            }
-            .setNegativeButton(R.string.cancel_button) { dialog, id ->
-                dialog.cancel()
-            }
-            .setTitle(R.string.todo_settings_title)
-
         // view body
         when (todo.timePeriod) {
             TimePeriod.DAYS -> {
@@ -90,9 +92,7 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
             null -> {}
         }
 
-
-
-        return builder.create()
+        return dialog
     }
 
     private fun saveWithInput(): Boolean {
