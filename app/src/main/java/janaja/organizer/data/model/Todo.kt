@@ -15,11 +15,17 @@ data class Todo(
     var hour: Int = 0,
     var lastResetTime: LocalDateTime? = null
 ) {
+    // TODO testing and exception handling
 
     enum class TimePeriod { DAYS, WEEKS, MONTHS }
 
-    // TODO testing and exception handling
-    fun reset() : Boolean{
+    fun tryReset(): Boolean{
+        val resetTime = isResetTime()
+        if(resetTime) reset()
+        return resetTime
+    }
+
+    private fun reset() : Boolean{
         val now: LocalDateTime = LocalDateTime.now()
         // reset time
         when(timePeriod){
@@ -48,13 +54,14 @@ data class Todo(
             if(line.repeat){
                 line.isChecked = false
             } else {
-                body.removeAt(i)
+                if(line.isChecked)
+                    body.removeAt(i)
             }
         }
         return true
     }
 
-    fun isResetTime(): Boolean {
+    private fun isResetTime(): Boolean {
         // go back x days/weeks/months, if the time is after the time of the last reset then do a reset
 
         val currentTime: LocalDateTime = LocalDateTime.now()
@@ -76,7 +83,7 @@ data class Todo(
         return latestPossibleResetTime.isAfter(lastResetTime)
     }
 
-    fun initResetTime(timePeriod: TimePeriod?, x: Int = 0, y: Int = 0, hour: Int = 0){
+    fun initResetTime(timePeriod: TimePeriod?, x: Int, y: Int, hour: Int){
         this.timePeriod = timePeriod
         this.x = x
         this.y = y

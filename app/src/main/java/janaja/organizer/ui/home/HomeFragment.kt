@@ -64,7 +64,9 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
                 noteAdapter!!.updateList()
             }
         }
-        viewModel.reminders.observe(viewLifecycleOwner) { reminders ->
+
+        viewModel.checkTodoReset()
+        viewModel.todos.observe(viewLifecycleOwner) { reminders ->
             HomeTodoRVA(reminders).also {
                 binding.cvHomeReminders.setTodoRecyclerViewAdapter(it)
             }

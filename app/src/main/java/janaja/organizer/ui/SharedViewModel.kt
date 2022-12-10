@@ -8,22 +8,26 @@ import janaja.organizer.data.model.Todo
 
 class SharedViewModel : ViewModel() {
 
-    val repository = Repository.getRepository()
+    private val repository = Repository.getRepository()
     val notes: LiveData<MutableList<Note>> = repository.dummyNoteData
-    val reminders: LiveData<MutableList<Todo>> = repository.dummyTodoData
+    val todos: LiveData<MutableList<Todo>> = repository.dummyTodoData
 
-    fun deleteNotes(selected: List<Boolean>){
+    fun checkTodoReset() {
+        repository.checkTodoReset()
+    }
+
+    fun deleteNotes(selected: List<Boolean>) {
         val indices: MutableList<Int> = mutableListOf()
-        for(i in selected.indices)
-            if(selected[i]) indices.add(i)
+        for (i in selected.indices)
+            if (selected[i]) indices.add(i)
         repository.deleteNotes(indices)
     }
 
-    fun addNote(note: Note){
+    fun addNote(note: Note) {
         repository.addNote(note)
     }
 
-    fun updateNote(note: Note){
+    fun updateNote(note: Note) {
         repository.updateNote(note)
     }
 

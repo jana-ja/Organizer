@@ -15,12 +15,17 @@ class Repository {
         Note(3, "Kaufen", mutableListOf(Line(6,"Spa"))),
         Note(4, "Kaufen", mutableListOf(Line(7,"Spaghetti"),Line(8,"Hände"),Line(9,"Tomaten"),Line(10,"brrrr"),Line(11,"Spaghetti"),Line(12,"Hände"),Line(13,"Tomaten"),Line(14,"brrrr"))),
     ))
+
     val dummyTodoData: MutableLiveData<MutableList<Todo>> = MutableLiveData(mutableListOf(Todo(5, "Heute", mutableListOf(Line(15,"Wasser trinken", repeat = true), Line(16,"Aufräumen"))),
     Todo(6, "Diese Woche", mutableListOf(Line(17,"Sport", repeat = true),Line(18,"Lesen"), Line(19,"Pflanzen gießen", repeat = true))),
     Todo(7, "Diesen Monat", mutableListOf(Line(20,"Putzen", repeat = true),Line(21,"Auto Check", repeat = true))),
     Todo(8, "Backlog", mutableListOf(Line(22,"Aussortieren")))
     ))
 
+    fun checkTodoReset(){
+        // TODO dummy method
+        dummyTodoData.value?.forEach { it.tryReset() }
+    }
 
     fun getNote(id: Long): Note? {
         // TODO dummy method
@@ -33,8 +38,10 @@ class Repository {
     fun getTodo(id: Long): Todo? {
         // TODO dummy method
         dummyTodoData.value?.filter { todo: Todo -> todo.id == id }.also {
-            if(!it.isNullOrEmpty()) return it[0]
-        }
+            if(!it.isNullOrEmpty()) {
+                it[0].tryReset()
+                return it[0]}
+            }
         return null
     }
 
