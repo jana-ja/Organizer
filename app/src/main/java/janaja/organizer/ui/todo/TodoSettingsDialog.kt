@@ -23,38 +23,6 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
 
         binding = DialogTodoSettingsBinding.inflate(requireActivity().layoutInflater)
 
-        // dialog buttons
-        builder.setView(binding.root)
-            .setPositiveButton(R.string.apply_button) { dialog, id ->
-                saveWithInput()
-            }
-            .setNegativeButton(R.string.cancel_button) { dialog, id ->
-                dialog.cancel()
-            }
-            .setTitle(R.string.todo_settings_title)
-
-        // view body
-        when (todo.timePeriod) {
-            TimePeriod.DAYS -> {
-                binding.cbDays.callOnClick()
-                binding.etXDays.setText(todo.x.toString())
-                binding.etTimeDays.setText(todo.hour.toString())
-            }
-            TimePeriod.WEEKS -> {
-                binding.cbWeeks.callOnClick()
-                binding.etXWeeks.setText(todo.x.toString())
-                binding.etOnWeeks.setText(todo.y.toString())
-                binding.etTimeWeeks.setText(todo.hour.toString())
-            }
-            TimePeriod.MONTHS -> {
-                binding.cbMonths.callOnClick()
-                binding.etXMonths.setText(todo.x.toString())
-                binding.etOnMonths.setText(todo.y.toString())
-                binding.etTimeMonths.setText(todo.hour.toString())
-            }
-            null -> {}
-        }
-
         // checkbox radio group
         binding.cbDays.setOnClickListener {
             if (!binding.cbDays.isChecked) {
@@ -86,6 +54,42 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
                 activate(TimePeriod.MONTHS)
             }
         }
+
+        // dialog buttons
+        builder.setView(binding.root)
+            .setPositiveButton(R.string.apply_button) { dialog, id ->
+                saveWithInput()
+            }
+            .setNegativeButton(R.string.cancel_button) { dialog, id ->
+                dialog.cancel()
+            }
+            .setTitle(R.string.todo_settings_title)
+
+        // view body
+        when (todo.timePeriod) {
+            TimePeriod.DAYS -> {
+                binding.cbDays.isChecked = true
+                binding.cbDays.callOnClick()
+                binding.etXDays.setText(todo.x.toString())
+                binding.etTimeDays.setText(todo.hour.toString())
+            }
+            TimePeriod.WEEKS -> {
+                binding.cbWeeks.isChecked = true
+                binding.cbWeeks.callOnClick()
+                binding.etXWeeks.setText(todo.x.toString())
+                binding.etOnWeeks.setText(todo.y.toString())
+                binding.etTimeWeeks.setText(todo.hour.toString())
+            }
+            TimePeriod.MONTHS -> {
+                binding.cbMonths.isChecked = true
+                binding.cbMonths.callOnClick()
+                binding.etXMonths.setText(todo.x.toString())
+                binding.etOnMonths.setText(todo.y.toString())
+                binding.etTimeMonths.setText(todo.hour.toString())
+            }
+            null -> {}
+        }
+
 
 
         return builder.create()
