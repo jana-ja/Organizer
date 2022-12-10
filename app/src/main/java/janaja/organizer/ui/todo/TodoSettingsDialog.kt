@@ -2,6 +2,8 @@ package janaja.organizer.ui.todo
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import janaja.organizer.R
@@ -55,55 +57,120 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
 
         // checkbox radio group
         binding.cbDays.setOnClickListener {
-            activate(TimePeriod.DAYS)
-            deactivate(TimePeriod.WEEKS)
-            deactivate(TimePeriod.MONTHS)
+            if (!binding.cbDays.isChecked) {
+                deactivate(TimePeriod.DAYS)
+                selected = null
+            } else {
+                activate(TimePeriod.DAYS)
+                deactivate(TimePeriod.WEEKS)
+                deactivate(TimePeriod.MONTHS)
+            }
         }
         binding.cbWeeks.setOnClickListener {
-            deactivate(TimePeriod.DAYS)
-            activate(TimePeriod.WEEKS)
-            deactivate(TimePeriod.MONTHS)
+            if (!binding.cbWeeks.isChecked) {
+                deactivate(TimePeriod.WEEKS)
+                selected = null
+            } else {
+                deactivate(TimePeriod.DAYS)
+                activate(TimePeriod.WEEKS)
+                deactivate(TimePeriod.MONTHS)
+            }
         }
         binding.cbMonths.setOnClickListener {
-            deactivate(TimePeriod.DAYS)
-            deactivate(TimePeriod.WEEKS)
-            activate(TimePeriod.MONTHS)
+            if (!binding.cbMonths.isChecked) {
+                deactivate(TimePeriod.MONTHS)
+                selected = null
+            } else {
+                deactivate(TimePeriod.DAYS)
+                deactivate(TimePeriod.WEEKS)
+                activate(TimePeriod.MONTHS)
+            }
         }
 
 
         return builder.create()
     }
 
-    private fun saveWithInput() {
-        val x: Int
-        val y: Int
-        val hour: Int
+    private fun saveWithInput(): Boolean {
+        val x: Int?
+        val y: Int?
+        val hour: Int?
 
         when (selected) {
             TimePeriod.DAYS -> {
-                // TODO check input
-                x = binding.etXDays.text.toString().toInt()
-                hour = binding.etTimeDays.toString().toInt()
-                todo.initResetTime(selected, x, hour = hour)
-
+                x = parseEditableToInt(binding.etXDays.text)
+                hour = parseHour(binding.etTimeDays.text)
+                if (x == null || hour == null)
+                    return false
+                y = 0
             }
             TimePeriod.WEEKS -> {
-                x = binding.etXWeeks.text.toString().toInt()
-                y = binding.etOnWeeks.text.toString().toInt()
-                hour = binding.etTimeWeeks.toString().toInt()
-                todo.initResetTime(selected, x, y, hour)
-
+                x = parseEditableToInt(binding.etXWeeks.text)
+                y = parseDayInWeek(binding.etOnWeeks.text)
+                hour = parseHour(binding.etTimeWeeks.text)
+                if (x == null || y == null || hour == null)
+                    return false
             }
             TimePeriod.MONTHS -> {
-                x = binding.etXMonths.text.toString().toInt()
-                y = binding.etOnMonths.text.toString().toInt()
-                hour = binding.etTimeMonths.toString().toInt()
-                todo.initResetTime(selected, x, y, hour)
-
+                x = parseEditableToInt(binding.etXMonths.text)
+                y = parseDayInMonth(binding.etOnMonths.text)
+                hour = parseHour(binding.etTimeMonths.text)
+                if (x == null || y == null || hour == null)
+                    return false
             }
-            else -> todo.initResetTime(selected)
+            else -> {
+                x = 0
+                y = 0
+                hour = 0
+            }
         }
+        todo.initResetTime(selected, x, y, hour)
+        return true
     }
+
+    private fun parseEditableToInt(input: Editable): Int? {
+        return try {
+            kotlin.math.abs(input.toString().toInt())
+        } catch (e: java.lang.NumberFormatException) {
+            Toast.makeText(requireContext(), "Only Numbers accepted as Input", Toast.LENGTH_SHORT).show()
+            null
+        }
+
+    }
+
+    private fun parseDayInWeek(input: Editable): Int? {
+        val day = parseEditableToInt(input)
+        if (day != null) {
+            if ((day < 1) || (day > 7)) {
+                Toast.makeText(requireContext(), "Only days between 1 and 7 are accepted", Toast.LENGTH_SHORT).show()
+                return null
+            }
+        }
+        return day
+    }
+
+    private fun parseDayInMonth(input: Editable): Int? {
+        val day = parseEditableToInt(input)
+        if (day != null) {
+            if ((day < 1) || (day > 28)) {
+                Toast.makeText(requireContext(), "Only days between 1 and 28 are accepted", Toast.LENGTH_SHORT).show()
+                return null
+            }
+        }
+        return day
+    }
+
+    private fun parseHour(input: Editable): Int? {
+        val hour = parseEditableToInt(input)
+        if (hour != null) {
+            if ((hour < 0) || (hour > 23)) {
+                Toast.makeText(requireContext(), "Only hours between 0 and 23 are accepted", Toast.LENGTH_SHORT).show()
+                return null
+            }
+        }
+        return hour
+    }
+
 
     // TDOD alle deactivate timeperdio auf null setzen
 
