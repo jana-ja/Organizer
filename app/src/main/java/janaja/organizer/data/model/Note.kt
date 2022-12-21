@@ -1,13 +1,13 @@
 package janaja.organizer.data.model
 
+import com.noodle.Id
 import kotlin.random.Random
 
 data class Note(
-    val id: Long,
+    @Id
+    var id: Long,
     var title: String = "",
-    // TODO richtige ID
-    var body: MutableList<Line> = mutableListOf(Line(Random.nextLong(),"",false)),
+    var body: MutableList<NoteLine> = mutableListOf(NoteLine(Random.nextLong(),"",false)),
     var isCheckList: Boolean = false,
     var categories: MutableList<Category> = mutableListOf()
-) {
-}
+)

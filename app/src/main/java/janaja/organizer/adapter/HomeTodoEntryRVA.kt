@@ -1,6 +1,7 @@
 package janaja.organizer.adapter
 
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,10 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
-import janaja.organizer.data.model.NoteLine
+import janaja.organizer.data.model.TodoLine
 import kotlin.random.Random
 
-class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>() {
+class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>) : RecyclerView.Adapter<HomeTodoEntryRVA.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lineText: TextView = view.findViewById(R.id.note_entry_line)
@@ -20,7 +21,7 @@ class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.A
 
     fun addLine(position: Int, line: String) {
         // TODO richtige ID
-        dataset.add(position, NoteLine(Random.nextLong(), line, false))
+        dataset.add(position, TodoLine(Random.nextLong(), line, false))
         notifyItemInserted(position)
     }
 
@@ -47,6 +48,10 @@ class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.A
             } else {
                 holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
+        }
+
+        if (line.repeat) {
+            holder.lineText.setTypeface(null, Typeface.BOLD)
         }
     }
 

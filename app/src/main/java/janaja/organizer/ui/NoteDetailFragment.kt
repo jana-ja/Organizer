@@ -9,8 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import janaja.organizer.R
 import janaja.organizer.adapter.DetailChecklistEntryRVA
-import janaja.organizer.data.Repository
-import janaja.organizer.data.model.Line
+import janaja.organizer.data.model.NoteLine
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentNoteDetailBinding
 import kotlin.random.Random
@@ -18,7 +17,6 @@ import kotlin.random.Random
 class NoteDetailFragment : Fragment() {
 
     private val viewModel: SharedViewModel by activityViewModels()
-    private val repo = Repository.getRepository()
     private lateinit var binding: FragmentNoteDetailBinding
     // TODO lateinit and null type not possible. how to handle porperly?
     private var note: Note? = null
@@ -31,7 +29,7 @@ class NoteDetailFragment : Fragment() {
         binding = FragmentNoteDetailBinding.inflate(inflater)
 
         val noteId = requireArguments().getLong("noteId")
-        val note = repo.getNote(noteId)
+        val note = viewModel.getNote(noteId)
 
         if(note != null) {
             this.note = note
@@ -81,7 +79,7 @@ class NoteDetailFragment : Fragment() {
             } else {
                 val body = binding.detailNoteBody.text.toString()
                 // TODO richtige ID
-                note!!.body = body.split("\n").map { s -> Line(Random.nextLong(),s, false) }.toMutableList()
+                note!!.body = body.split("\n").map { s -> NoteLine(Random.nextLong(),s, false) }.toMutableList()
             }
             viewModel.updateNote(note!!)
         }

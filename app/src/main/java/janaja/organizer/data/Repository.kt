@@ -1,54 +1,94 @@
 package janaja.organizer.data
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import janaja.organizer.data.model.Line
+import com.noodle.Noodle
+import janaja.organizer.data.model.NoteLine
 import janaja.organizer.data.model.Note
 import janaja.organizer.data.model.Todo
+import janaja.organizer.data.model.TodoLine
 
-class Repository {
+class Repository(noodle: Noodle) {
+
+    // db
 
 
-    val dummyNoteData: MutableLiveData<MutableList<Note>> = MutableLiveData(mutableListOf(
-        Note(0, "Title", mutableListOf(Line(0,"Body"))),
-        Note(1, "Title Haha", mutableListOf(Line(1,"ICh mache nOtiz"),Line(2,"Super toll")),true),
-        Note(2, "Wow", mutableListOf(Line(3,"GuNa"),Line(4,"hehe"),Line(5,"länger"))),
-        Note(3, "Kaufen", mutableListOf(Line(6,"Spa"))),
-        Note(4, "Kaufen", mutableListOf(Line(7,"Spaghetti"),Line(8,"Hände"),Line(9,"Tomaten"),Line(10,"brrrr"),Line(11,"Spaghetti"),Line(12,"Hände"),Line(13,"Tomaten"),Line(14,"brrrr"))),
-    ))
+    private val todoCollection = noodle.collectionOf(Todo::class.java)
 
-    val dummyTodoData: MutableLiveData<MutableList<Todo>> = MutableLiveData(mutableListOf(Todo(5, "Heute", mutableListOf(Line(15,"Wasser trinken", repeat = true), Line(16,"Aufräumen"))),
-    Todo(6, "Diese Woche", mutableListOf(Line(17,"Sport", repeat = true),Line(18,"Lesen"), Line(19,"Pflanzen gießen", repeat = true))),
-    Todo(7, "Diesen Monat", mutableListOf(Line(20,"Putzen", repeat = true),Line(21,"Auto Check", repeat = true))),
-    Todo(8, "Backlog", mutableListOf(Line(22,"Aussortieren")))
-    ))
 
-    fun checkTodoReset(){
-        // TODO dummy method
-        dummyTodoData.value?.forEach { it.tryReset() }
-    }
+    // livedata
+    private val _todos = MutableLiveData<MutableList<Todo>>()
+    val todos: LiveData<MutableList<Todo>>
+        get() = _todos
+    private val _detailTodo = MutableLiveData<Todo?>()
+    val detailTodo: LiveData<Todo?>
+        get() = _detailTodo
 
-    fun getNote(id: Long): Note? {
-        // TODO dummy method
-        dummyNoteData.value?.filter { note: Note -> note.id == id }.also {
-            if(!it.isNullOrEmpty()) return it[0]
+    val dummyNoteData: MutableLiveData<MutableList<Note>> = MutableLiveData(
+        mutableListOf(
+            Note(0, "Title", mutableListOf(NoteLine(0, "Body"))),
+            Note(1, "Title Haha", mutableListOf(NoteLine(1, "ICh mache nOtiz"), NoteLine(2, "Super toll")), true),
+            Note(2, "Wow", mutableListOf(NoteLine(3, "GuNa"), NoteLine(4, "hehe"), NoteLine(5, "länger"))),
+            Note(3, "Kaufen", mutableListOf(NoteLine(6, "Spa"))),
+            Note(
+                4,
+                "Kaufen",
+                mutableListOf(
+                    NoteLine(7, "Spaghetti"),
+                    NoteLine(8, "Hände"),
+                    NoteLine(9, "Tomaten"),
+                    NoteLine(10, "brrrr"),
+                    NoteLine(11, "Spaghetti"),
+                    NoteLine(12, "Hände"),
+                    NoteLine(13, "Tomaten"),
+                    NoteLine(14, "brrrr")
+                )
+            ),
+        )
+    )
+
+    private val dummyTodoData: List<Todo> = listOf(
+        Todo(5, "Heute", mutableListOf(TodoLine(15, "Wasser trinken", repeat = true), TodoLine(16, "Aufräumen"))),
+        Todo(6, "Diese Woche", mutableListOf(TodoLine(17, "Sport", repeat = true), TodoLine(19, "Pflanzen gießen", repeat = true))),
+        Todo(7, "Diesen Monat", mutableListOf(TodoLine(20, "Putzen", repeat = true), TodoLine(21, "Auto Check", repeat = true))),
+        Todo(8, "Backlog", mutableListOf(TodoLine(22, "Aussortieren")))
+    )
+
+
+    fun initDbIfEmpty() {
+        if (todoCollection.count() == 0) {
+            todoCollection.putAll(dummyTodoData)
         }
-        return null
     }
 
-    fun getTodo(id: Long): Todo? {
-        // TODO dummy method
-        dummyTodoData.value?.filter { todo: Todo -> todo.id == id }.also {
-            if(!it.isNullOrEmpty()) {
-                it[0].tryReset()
-                return it[0]}
-            }
-        return null
+    // functions for todos
+
+    fun loadAllTodos() {
+        if (todoCollection.count() != 0)
+            _todos.postValue(todoCollection.all)
     }
 
-    fun addNote(note: Note){
-        dummyNoteData.value?.add(0, note)
-        dummyNoteData.notifyObservers()
+    fun checkTodoReset() {
+        todos.value?.forEach { it.tryReset() } // TODO id reset true update toto in db
     }
+
+    fun loadTodo(id: Long) {
+        _detailTodo.postValue(todoCollection.get(id))
+    }
+
+    fun unloadDetailTodo() {
+        _detailTodo.value = null
+    }
+
+    fun updateTodo(todo: Todo) {
+        todoCollection.delete(todo.id)
+        todoCollection.put(todo)
+    }
+
+
+    // functions for notes
+
+    fun loadAllNotes() {}
 
     fun deleteNotes(indices: List<Int>) {
         // TODO dummy method
@@ -56,16 +96,25 @@ class Repository {
         dummyNoteData.notifyObservers()
     }
 
-    private fun <T> MutableLiveData<T>.notifyObservers() {
-        this.value = this.value
+    fun addNote(note: Note) {
+        dummyNoteData.value?.add(0, note)
+        dummyNoteData.notifyObservers()
+    }
+
+    fun getNote(id: Long): Note? {
+        // TODO dummy method
+        dummyNoteData.value?.filter { note: Note -> note.id == id }.also {
+            if (!it.isNullOrEmpty()) return it[0]
+        }
+        return null
     }
 
     fun updateNote(note: Note) {
         // TODO dummy method
         val list = dummyNoteData.value
-        if(list != null) {
+        if (list != null) {
             val oldNote = list.find { it.id == note.id }
-            if(oldNote != null) {
+            if (oldNote != null) {
                 val index = list.indexOf(oldNote)
                 list.removeAt(index)
                 list.add(index, note)
@@ -75,26 +124,18 @@ class Repository {
         // TODO handle error
     }
 
-    fun updateTodo(todo: Todo) {
-        // TODO dummy method
-        val list = dummyTodoData.value
-        if(list != null) {
-            val oldTodo = list.find { it.id == todo.id }
-            if(oldTodo != null) {
-                val index = list.indexOf(oldTodo)
-                list.removeAt(index)
-                list.add(index, todo)
-                return
-            }
-        }
+
+    private fun <T> MutableLiveData<T>.notifyObservers() {
+        this.value = this.value
     }
+
 
     companion object {
         private var instance: Repository? = null
 
-        fun getRepository(): Repository {
+        fun getRepository(noodle: Noodle): Repository {
             return instance ?: synchronized(this) {
-                instance ?: Repository().also { instance = it }
+                instance ?: Repository(noodle).also { instance = it }
             }
         }
     }

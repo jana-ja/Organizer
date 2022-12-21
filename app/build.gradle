@@ -59,4 +59,7 @@ dependencies {
     // room
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // noodle object storage
+    implementation 'com.github.nolia:Noodle:master-SNAPSHOT'
 }

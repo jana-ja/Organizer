@@ -1,6 +1,9 @@
 package janaja.organizer.data.model
 
-class Line(
+import com.noodle.Id
+
+class TodoLine(
+    @Id
     var id: Long,
     var text: String,
     var isChecked: Boolean = false,
@@ -10,13 +13,13 @@ class Line(
         return text
     }
 
-    fun equalContent(line: Line): Boolean {
+    fun equalContent(line: TodoLine): Boolean {
         if(repeat != line.repeat || text != line.text || isChecked != line.isChecked)
             return false
         return true
     }
 
-    fun copyLine(): Line {
-        return Line(id,text,isChecked,repeat)
+    fun copyLine(): TodoLine {
+        return TodoLine(id,text,isChecked,repeat)
     }
 }

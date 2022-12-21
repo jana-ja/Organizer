@@ -1,9 +1,9 @@
 package janaja.organizer.util
 
 import androidx.recyclerview.widget.DiffUtil
-import janaja.organizer.data.model.Line
+import janaja.organizer.data.model.TodoLine
 
-class LineDiffCallback(private val oldList: List<Line>, private val newList: List<Line>): DiffUtil.Callback() {
+class TodoLineDiffCallback(private val oldList: List<TodoLine>, private val newList: List<TodoLine>): DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldList.size

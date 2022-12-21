@@ -12,17 +12,17 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
-import janaja.organizer.data.model.Line
-import janaja.organizer.util.LineDiffCallback
+import janaja.organizer.data.model.TodoLine
 import janaja.organizer.util.TodoDetailCallback
+import janaja.organizer.util.TodoLineDiffCallback
 import kotlin.random.Random
 
-class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInterface: TodoDetailCallback) :
+class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbackInterface: TodoDetailCallback) :
     RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>() {
 
     private lateinit var recyclerView: RecyclerView
 
-    private var oldList: List<Line> = dataset.map { it.copyLine() }
+    private var oldList: List<TodoLine> = dataset.map { it.copyLine() }
 
     private var insert = false
     private var insertEnd = false
@@ -37,7 +37,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInt
     fun addLine(position: Int = dataset.size, line: String = "") {
         insert = true
         // TODO richtige ID
-        dataset.add(position, Line(Random.nextLong(), line, false))
+        dataset.add(position, TodoLine(Random.nextLong(), line, false))
         notifyItemInserted(position)
     }
 
@@ -53,10 +53,15 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInt
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
-        LineDiffCallback(oldList, dataset).also {
+        TodoLineDiffCallback(oldList, dataset).also {
             DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
         }
         oldList = dataset.map { it.copyLine() }
+    }
+
+    fun submitNewList(newList: MutableList<TodoLine>){
+        dataset = newList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -150,7 +155,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<Line>, private val callbackInt
         return dataset.size
     }
 
-    fun getAllLines(): MutableList<Line> {
+    fun getAllLines(): MutableList<TodoLine> {
         return dataset
     }
 

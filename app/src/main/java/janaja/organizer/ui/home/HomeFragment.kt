@@ -65,8 +65,10 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
             }
         }
 
-        viewModel.checkTodoReset()
+        viewModel.initDbIfEmpty()
+        viewModel.loadAllTodos()
         viewModel.todos.observe(viewLifecycleOwner) { reminders ->
+            viewModel.checkTodoReset()
             HomeTodoRVA(reminders).also {
                 binding.cvHomeReminders.setTodoRecyclerViewAdapter(it)
             }

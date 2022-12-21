@@ -7,15 +7,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import janaja.organizer.R
+import janaja.organizer.data.model.TimePeriod
 import janaja.organizer.data.model.Todo
-import janaja.organizer.data.model.Todo.TimePeriod
 import janaja.organizer.databinding.DialogTodoSettingsBinding
 
 class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
 
     private lateinit var binding: DialogTodoSettingsBinding
 
-    private var selected: TimePeriod? = null
+    private var selected: Int? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -178,7 +178,7 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
 
     // TDOD alle deactivate timeperdio auf null setzen
 
-    private fun activate(timePeriod: TimePeriod) {
+    private fun activate(timePeriod: Int) {
         selected = timePeriod
         when (timePeriod) {
             TimePeriod.DAYS -> {
@@ -196,7 +196,7 @@ class TodoSettingsDialog(val todo: Todo) : DialogFragment() {
         }
     }
 
-    private fun deactivate(timePeriod: TimePeriod) {
+    private fun deactivate(timePeriod: Int) {
         when (timePeriod) {
             TimePeriod.DAYS -> {
                 binding.cbDays.isChecked = false

@@ -12,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import janaja.organizer.R
 import janaja.organizer.adapter.DetailTodoEntryRVA
-import janaja.organizer.data.Repository
 import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.FragmentTodoDetailBinding
 import janaja.organizer.ui.SharedViewModel
@@ -25,12 +24,9 @@ import kotlinx.coroutines.withContext
 class TodoDetailFragment : Fragment(), TodoDetailCallback {
 
     private val viewModel: SharedViewModel by activityViewModels()
-    private val repo = Repository.getRepository()
     private lateinit var binding: FragmentTodoDetailBinding
 
-
-    // TODO lateinit and null type not possible. how to handle properly?
-    private lateinit var todo: Todo
+    private var todo: Todo? = null
     private lateinit var adapter: DetailTodoEntryRVA
 
     override fun onCreateView(
@@ -40,17 +36,28 @@ class TodoDetailFragment : Fragment(), TodoDetailCallback {
         binding = FragmentTodoDetailBinding.inflate(inflater)
 
         val noteId = requireArguments().getLong("todoId")
-        val todo = repo.getTodo(noteId)
+        var newLine = requireArguments().getBoolean("newLine")
 
-        if (todo != null) {
-            this.todo = todo
-            binding.detailNoteTitle.setText(todo.title)
-            adapter = DetailTodoEntryRVA(todo.body, this)
-            binding.detailNoteBodyRv.adapter = adapter
-        } else {
-            // TODO error handling
+
+        adapter = DetailTodoEntryRVA(mutableListOf(), this)
+        binding.detailNoteBodyRv.adapter = adapter
+        viewModel.loadTodo(noteId)
+        viewModel.detailTodo.observe(viewLifecycleOwner){
+            if(it != null){
+                this.todo = it
+                binding.detailNoteTitle.setText(it.title)
+                adapter.submitNewList(it.body)
+                // is true when navigating here from home screen add button
+                if (newLine) {
+                    adapter.addLineEnd()
+                    newLine = false
+                }
+
+            } else {
+                // TODO error handling
+                // toast and navigate back??
+            }
         }
-
 
         return binding.root
     }
@@ -67,8 +74,13 @@ class TodoDetailFragment : Fragment(), TodoDetailCallback {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_todo_detail_settings -> {
-                        TodoSettingsDialog(todo).show(requireActivity().supportFragmentManager, "SettingsDialog")
-                        true
+                        if(todo != null){
+                            TodoSettingsDialog(todo!!).show(requireActivity().supportFragmentManager, "SettingsDialog")
+                            true
+                        } else {
+                            // TODO error handling?
+                            false
+                        }
                     }
                     else -> false
                 }
@@ -79,21 +91,18 @@ class TodoDetailFragment : Fragment(), TodoDetailCallback {
         binding.addLineCl.setOnClickListener {
             adapter.addLine()
         }
-
-        // is true when navigation here from home screen add button
-        val newLine = requireArguments().getBoolean("newLine")
-        if (newLine)
-            adapter.addLineEnd()
     }
 
 
     override fun onStop() {
         super.onStop()
+        todo?.also {
+            it.title = binding.detailNoteTitle.text.toString()
+            it.body = adapter.getAllLines()
 
-        todo.title = binding.detailNoteTitle.text.toString()
-        todo.body = adapter.getAllLines()
-
-        viewModel.updateTodo(todo)
+            viewModel.updateTodo(it)
+            viewModel.unloadDetailTodo()
+        }
     }
 
     override fun showSoftKeyboard(view: View) {

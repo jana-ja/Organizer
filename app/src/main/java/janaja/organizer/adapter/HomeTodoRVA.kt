@@ -46,7 +46,7 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
         val todo = dataset[position]
         holder.title.text = todo.title
 
-        holder.bodyRv.adapter = HomeChecklistEntryRVA(todo.body)
+        holder.bodyRv.adapter = HomeTodoEntryRVA(todo.body)
 
         // recyclerview and its parent card view should have the same behaviour
         manageNavigationClickListeners(holder, position)

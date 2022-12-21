@@ -1,7 +1,9 @@
 package janaja.organizer.data.model
 
-data class Category(
-    val id: Long, val name: String
-) {
+import com.noodle.Id
 
-}
+data class Category(
+    @Id
+    var id: Long,
+    var name: String
+)
