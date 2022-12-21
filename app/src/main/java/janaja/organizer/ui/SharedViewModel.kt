@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import janaja.organizer.data.Repository
 import janaja.organizer.data.local.getDatabase
 import janaja.organizer.data.model.Note
-import janaja.organizer.data.model.RoomTodo
 import janaja.organizer.data.model.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +17,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     private val repository = Repository(getDatabase(application))
     val notes: LiveData<MutableList<Note>> = repository.dummyNoteData
     val todos: LiveData<MutableList<Todo>?> = repository.todos
-    val roomTodos: LiveData<List<RoomTodo>> = repository.roomTodos
     val detailTodo = repository.detailTodo
     val finishedUpdating = repository.finishedUpdating
 
@@ -51,11 +49,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun convertAllTodos(roomTodos: List<RoomTodo>){
-        viewModelScope.launch {
-            repository.convertAllTodos(roomTodos)
-        }
-    }
     fun loadAndConvertAllTodos(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.loadAndConvertAllTodos()

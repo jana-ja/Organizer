@@ -8,8 +8,6 @@ import janaja.organizer.data.model.*
 class Repository(val database: AppDatabase) {
 
     // livedata
-    val roomTodos: LiveData<List<RoomTodo>> = database.roomTodoDao.getAllLiveData()
-
     private val _finishedUpdating: MutableLiveData<Boolean> = MutableLiveData(true)
     val finishedUpdating: LiveData<Boolean>
         get() = _finishedUpdating
@@ -63,16 +61,6 @@ class Repository(val database: AppDatabase) {
 
     // functions for todos
 
-    suspend fun convertAllTodos(roomTodos: List<RoomTodo>) {
-        val convertedTodos = mutableListOf<Todo>()
-        // TODO mit coroutine parallelisieren
-        roomTodos.forEach {
-            val roomBody = database.roomTodoLineDao.getAllForTodoId(it.id)
-            convertedTodos.add(convertRoomTodoToTodo(it, roomBody))
-        }
-        _todos.value = convertedTodos
-    }
-
     suspend fun loadAndConvertAllTodos() {
         val roomTodos = database.roomTodoDao.getAll()
         val convertedTodos = mutableListOf<Todo>()
@@ -119,8 +107,6 @@ class Repository(val database: AppDatabase) {
 
 
 // functions for notes
-
-    fun loadAllNotes() {}
 
     fun deleteNotes(indices: List<Int>) {
         // TODO dummy method

@@ -66,17 +66,11 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
             }
         }
 
-        // TODO this solution leads to flickering when coming back from a detail screen
-        // because roomTodos still contains a value that is immediately observed
-        // and then again observed when updating data from the detail screen is finished
-        viewModel.roomTodos.observe(viewLifecycleOwner){
-            if(viewModel.finishedUpdating.value!!)
-                viewModel.convertAllTodos(it)
+        // when returning from a todos detail screen we need to wait until updating is finished
+        viewModel.finishedUpdating.observe(viewLifecycleOwner){
+            if(it)
+                viewModel.loadAndConvertAllTodos()
         }
-
-        // TODO this solution does not show content of todo right when coming back from a detail screen
-        // because updating this todos body has not finished yet when home screen is loaded
-//        viewModel.loadAndConvertAllTodos()
 
         viewModel.todos.observe(viewLifecycleOwner) {
             if (it != null) {
