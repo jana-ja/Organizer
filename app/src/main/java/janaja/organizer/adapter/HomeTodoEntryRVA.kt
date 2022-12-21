@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.TodoLine
-import kotlin.random.Random
 
 class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>) : RecyclerView.Adapter<HomeTodoEntryRVA.ItemViewHolder>() {
 
@@ -21,7 +20,7 @@ class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>) : RecyclerView.Adapte
 
     fun addLine(position: Int, line: String) {
         // TODO richtige ID
-        dataset.add(position, TodoLine(Random.nextLong(), line, false))
+        dataset.add(position, TodoLine( line, false))
         notifyItemInserted(position)
     }
 

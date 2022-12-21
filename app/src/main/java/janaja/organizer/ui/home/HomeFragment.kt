@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.HomeNoteRVA
-import janaja.organizer.adapter.HomeTodoRVA
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
@@ -55,6 +54,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        viewModel.initDbIfEmpty()
+
         viewModel.notes.observe(viewLifecycleOwner){ notes ->
             if(noteAdapter == null) {
                 noteAdapter = HomeNoteRVA(notes, this).also {
@@ -65,12 +66,20 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
             }
         }
 
-        viewModel.initDbIfEmpty()
-        viewModel.loadAllTodos()
-        viewModel.todos.observe(viewLifecycleOwner) { reminders ->
-            viewModel.checkTodoReset()
-            HomeTodoRVA(reminders).also {
-                binding.cvHomeReminders.setTodoRecyclerViewAdapter(it)
+        // TODO this solution leads to flickering when coming back from a detail screen
+        // because roomTodos still contains a value that is immediately observed
+        // and then again observed when updating data from the detail screen is finished
+        viewModel.roomTodos.observe(viewLifecycleOwner){
+            viewModel.convertAllTodos(it)
+        }
+
+        // TODO this solution does not show content of todo right when coming back from a detail screen
+        // because updating this todos body has not finished yet when home screen is loaded
+//        viewModel.loadAndConvertAllTodos()
+
+        viewModel.todos.observe(viewLifecycleOwner) {
+            if (it != null) {
+                binding.cvHomeReminders.updateTodoRecyclerViewAdapter(it)
             }
         }
 
@@ -98,6 +107,11 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
                 actionMode = requireActivity().startActionMode(actionModeCallback)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.resetTodosLiveData()
     }
 
     private val actionModeCallback = object : ActionMode.Callback {

@@ -1,22 +1,22 @@
 package janaja.organizer.data.model
 
-import com.noodle.Id
 import java.time.LocalDateTime
 import kotlin.math.abs
-import kotlin.random.Random
 
 class Todo(
-    @Id // noodle sets id automatically
     var id: Long = 0,
     var title: String = "",
-    // TODO richtige ID
-    var body: MutableList<TodoLine> = mutableListOf(TodoLine(Random.nextLong(), "")),
+    var body: MutableList<TodoLine> = mutableListOf(TodoLine("")),
     var timePeriod: Int? = null,
     var x: Int = 0, // reset every x days/weeks/months
     var y: Int = 0, // reset on y day of week/month
     var hour: Int = 0,
     private var lastResetTimeString: String = "" // DD.MM.YYYY.hh
 ) {
+
+    fun toRoomTodo(): RoomTodo{
+        return RoomTodo(id,title,timePeriod,x,y,hour,lastResetTimeString)
+    }
 
     // TODO testing and exception handling
 

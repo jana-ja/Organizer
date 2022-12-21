@@ -18,11 +18,16 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
     RecyclerView.Adapter<HomeTodoRVA.ItemViewHolder>() {
 
     private var oldList = dataset.toList()
-    private var selected: MutableList<Boolean> = MutableList(dataset.size) { false }
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
-        selected = MutableList(dataset.size) { false }
+        TodoDiffCallback(oldList, dataset).also {
+            DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
+        }
+        oldList = dataset.toList()
+    }
+    fun updateList(todos: MutableList<Todo>) {
+        dataset = todos
         TodoDiffCallback(oldList, dataset).also {
             DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
         }

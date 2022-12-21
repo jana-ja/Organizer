@@ -1,10 +1,6 @@
 package janaja.organizer.data.model
 
-import com.noodle.Id
-
 class TodoLine(
-    @Id
-    var id: Long,
     var text: String,
     var isChecked: Boolean = false,
     var repeat: Boolean = false
@@ -20,6 +16,10 @@ class TodoLine(
     }
 
     fun copyLine(): TodoLine {
-        return TodoLine(id,text,isChecked,repeat)
+        return TodoLine(text,isChecked,repeat)
+    }
+
+    fun toRoomTodoLine(todoId: Long): RoomTodoLine{
+        return  RoomTodoLine(text, isChecked, repeat, todoId)
     }
 }

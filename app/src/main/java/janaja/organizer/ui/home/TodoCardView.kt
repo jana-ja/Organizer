@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import janaja.organizer.R
 import janaja.organizer.adapter.HomeTodoRVA
+import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.TodoCardviewHeaderBinding
@@ -18,6 +19,7 @@ class TodoCardView(context: Context, attrs: AttributeSet) : CardView(context, at
     private val binding: HomeCardviewBinding
     private val headerBinding: TodoCardviewHeaderBinding
     private val contentBinding: NoteCardviewContentBinding
+    private val adapter: HomeTodoRVA
 
     init {
         binding = DataBindingUtil.inflate(
@@ -47,10 +49,11 @@ class TodoCardView(context: Context, attrs: AttributeSet) : CardView(context, at
             it.orientation = LinearLayoutManager.HORIZONTAL
             contentBinding.rvHomeCardviewNotes.layoutManager = it
         }
+        adapter = HomeTodoRVA(mutableListOf())
+        contentBinding.rvHomeCardviewNotes.adapter = adapter
     }
 
-
-    fun setTodoRecyclerViewAdapter(adapter: HomeTodoRVA) {
-        contentBinding.rvHomeCardviewNotes.adapter = adapter
+    fun updateTodoRecyclerViewAdapter(todos: MutableList<Todo>){
+        adapter.updateList(todos)
     }
 }

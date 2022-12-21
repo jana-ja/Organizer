@@ -9,13 +9,10 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.core.widget.doAfterTextChanged
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.TodoLine
 import janaja.organizer.util.TodoDetailCallback
-import janaja.organizer.util.TodoLineDiffCallback
-import kotlin.random.Random
 
 class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbackInterface: TodoDetailCallback) :
     RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>() {
@@ -37,7 +34,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbac
     fun addLine(position: Int = dataset.size, line: String = "") {
         insert = true
         // TODO richtige ID
-        dataset.add(position, TodoLine(Random.nextLong(), line, false))
+        dataset.add(position, TodoLine(line))
         notifyItemInserted(position)
     }
 
@@ -49,14 +46,6 @@ class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbac
     private fun removeLine(position: Int) {
         dataset.removeAt(position)
         notifyItemRemoved(position)
-    }
-
-    // called after dataset changed to display changes using DiffUtil
-    fun updateList() {
-        TodoLineDiffCallback(oldList, dataset).also {
-            DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
-        }
-        oldList = dataset.map { it.copyLine() }
     }
 
     fun submitNewList(newList: MutableList<TodoLine>){

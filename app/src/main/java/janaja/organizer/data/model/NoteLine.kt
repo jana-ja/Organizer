@@ -1,9 +1,7 @@
 package janaja.organizer.data.model
 
-import com.noodle.Id
 
 class NoteLine(
-    @Id
     var id: Long,
     var text: String,
     var isChecked: Boolean = false

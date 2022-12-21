@@ -1,33 +1,33 @@
 package janaja.organizer.ui
 
 import android.app.Application
-import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.noodle.Noodle
+import androidx.lifecycle.viewModelScope
 import janaja.organizer.data.Repository
+import janaja.organizer.data.local.getDatabase
 import janaja.organizer.data.model.Note
+import janaja.organizer.data.model.RoomTodo
+import janaja.organizer.data.model.RoomTodoLine
 import janaja.organizer.data.model.Todo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val noodle: Noodle = Noodle.with(application)
-        .addType<Todo>(Todo::class.java)
-        .build()
-    private val repository = Repository.getRepository(noodle)
+    private val repository = Repository(getDatabase(application))
     val notes: LiveData<MutableList<Note>> = repository.dummyNoteData
-    val todos: LiveData<MutableList<Todo>> = repository.todos
+    val todos: LiveData<MutableList<Todo>?> = repository.todos
+    val roomTodos: LiveData<List<RoomTodo>> = repository.roomTodos
     val detailTodo = repository.detailTodo
 
-    fun checkTodoReset() {
-        repository.checkTodoReset()
-    }
+
 
     fun initDbIfEmpty(){
-//        viewModelScope.launch {
+        viewModelScope.launch {
             repository.initDbIfEmpty()
-//        }
+        }
     }
 
     fun deleteNotes(selected: List<Boolean>) {
@@ -46,21 +46,26 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun updateTodo(todo: Todo) {
-//        viewModelScope.launch {
+        viewModelScope.launch {
             repository.updateTodo(todo)
-//        }
+        }
     }
 
-    fun loadAllTodos(){
-//        viewModelScope.launch {
-            repository.loadAllTodos()
-//        }
+    fun convertAllTodos(roomTodos: List<RoomTodo>){
+        viewModelScope.launch {
+            repository.convertAllTodos(roomTodos)
+        }
+    }
+    fun loadAndConvertAllTodos(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.loadAndConvertAllTodos()
+        }
     }
 
     fun loadTodo(id: Long){
-//        viewModelScope.launch {
+        viewModelScope.launch {
             repository.loadTodo(id)
-//        }
+        }
     }
 
     fun unloadDetailTodo() {
@@ -69,6 +74,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getNote(noteId: Long): Note? {
         return repository.getNote(noteId)
+    }
+
+    fun resetTodosLiveData() {
+        repository.resetTodosLiveData()
     }
 
 }

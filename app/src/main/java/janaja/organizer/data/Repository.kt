@@ -2,23 +2,17 @@ package janaja.organizer.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.noodle.Noodle
-import janaja.organizer.data.model.NoteLine
-import janaja.organizer.data.model.Note
-import janaja.organizer.data.model.Todo
-import janaja.organizer.data.model.TodoLine
+import janaja.organizer.data.local.AppDatabase
+import janaja.organizer.data.model.*
 
-class Repository(noodle: Noodle) {
-
-    // db
-
-
-    private val todoCollection = noodle.collectionOf(Todo::class.java)
-
+class Repository(val database: AppDatabase) {
 
     // livedata
-    private val _todos = MutableLiveData<MutableList<Todo>>()
-    val todos: LiveData<MutableList<Todo>>
+    val roomTodos: LiveData<List<RoomTodo>> = database.roomTodoDao.getAllLiveData()
+    val roomTodoLines: LiveData<List<RoomTodoLine>> = database.roomTodoLineDao.getAll()
+
+    private val _todos = MutableLiveData<MutableList<Todo>?>()
+    val todos: LiveData<MutableList<Todo>?>
         get() = _todos
     private val _detailTodo = MutableLiveData<Todo?>()
     val detailTodo: LiveData<Todo?>
@@ -48,45 +42,78 @@ class Repository(noodle: Noodle) {
     )
 
     private val dummyTodoData: List<Todo> = listOf(
-        Todo(5, "Heute", mutableListOf(TodoLine(15, "Wasser trinken", repeat = true), TodoLine(16, "Aufräumen"))),
-        Todo(6, "Diese Woche", mutableListOf(TodoLine(17, "Sport", repeat = true), TodoLine(19, "Pflanzen gießen", repeat = true))),
-        Todo(7, "Diesen Monat", mutableListOf(TodoLine(20, "Putzen", repeat = true), TodoLine(21, "Auto Check", repeat = true))),
-        Todo(8, "Backlog", mutableListOf(TodoLine(22, "Aussortieren")))
+        Todo(5, "Heute", mutableListOf(TodoLine( "Wasser trinken", repeat = true), TodoLine( "Aufräumen"))),
+        Todo(6, "Diese Woche", mutableListOf(TodoLine( "Sport", repeat = true), TodoLine( "Pflanzen gießen", repeat = true))),
+        Todo(7, "Diesen Monat", mutableListOf(TodoLine( "Putzen", repeat = true), TodoLine( "Auto Check", repeat = true))),
+        Todo(8, "Backlog", mutableListOf(TodoLine( "Aussortieren")))
     )
 
 
-    fun initDbIfEmpty() {
-        if (todoCollection.count() == 0) {
-            todoCollection.putAll(dummyTodoData)
+    suspend fun initDbIfEmpty() {
+        if(database.roomTodoDao.isEmpty()) {
+            dummyTodoData.forEach {
+                database.roomTodoDao.insert(it.toRoomTodo())
+                database.roomTodoLineDao.insertAll(it.body.map { todoLine -> todoLine.toRoomTodoLine(it.id) })
+            }
         }
     }
 
     // functions for todos
 
-    fun loadAllTodos() {
-        if (todoCollection.count() != 0)
-            _todos.postValue(todoCollection.all)
+    suspend fun convertAllTodos(roomTodos: List<RoomTodo>) {
+        val convertedTodos = mutableListOf<Todo>()
+        // TODO mit coroutine parallelisieren
+        roomTodos.forEach {
+            val roomBody = database.roomTodoLineDao.getAllForTodoId(it.id)
+            convertedTodos.add(convertRoomTodoToTodo(it, roomBody))
+        }
+        _todos.value = convertedTodos
     }
 
-    fun checkTodoReset() {
-        todos.value?.forEach { it.tryReset() } // TODO id reset true update toto in db
+    suspend fun loadAndConvertAllTodos() {
+        val roomTodos = database.roomTodoDao.getAll()
+        val convertedTodos = mutableListOf<Todo>()
+        // TODO mit coroutine parallelisieren
+        roomTodos.forEach {
+            val roomBody = database.roomTodoLineDao.getAllForTodoId(it.id)
+            convertedTodos.add(convertRoomTodoToTodo(it, roomBody))
+        }
+        _todos.postValue(convertedTodos)
     }
 
-    fun loadTodo(id: Long) {
-        _detailTodo.postValue(todoCollection.get(id))
+    private fun checkTodoReset() {
+        todos.value?.forEach { it.tryReset() } // TODO id reset true update todo in db
+    }
+
+    suspend fun loadTodo(id: Long) {
+        val roomTodo = database.roomTodoDao.getById(id)
+        val roomBody = database.roomTodoLineDao.getAllForTodoId(roomTodo.id)
+        _detailTodo.value = convertRoomTodoToTodo(roomTodo, roomBody)
+    }
+
+    private fun convertRoomTodoToTodo(roomTodo: RoomTodo, roomBody: List<RoomTodoLine>): Todo {
+        val body = roomBody.map { roomTodoLine -> roomTodoLine.toTodoLine() }.toMutableList()
+        return roomTodo.toTodo(body) // TODO hier direkt check reset einbaun
     }
 
     fun unloadDetailTodo() {
         _detailTodo.value = null
     }
 
-    fun updateTodo(todo: Todo) {
-        todoCollection.delete(todo.id)
-        todoCollection.put(todo)
+    suspend fun updateTodo(todo: Todo) {
+        // update todo_lines in db
+        val roomTodoLines = todo.body.map { todoLine -> todoLine.toRoomTodoLine(todo.id) }
+        database.roomTodoLineDao.deleteAllByTodoId(todo.id)
+        database.roomTodoLineDao.insertAll(roomTodoLines)
+//        database.roomTodoLineDao.updateAll(roomTodoLines)
+//        database.roomTodoLineDao.insertOnlyNew(roomTodoLines)
+
+        // update todo_in db
+        database.roomTodoDao.update(todo.toRoomTodo())
     }
 
 
-    // functions for notes
+// functions for notes
 
     fun loadAllNotes() {}
 
@@ -129,16 +156,8 @@ class Repository(noodle: Noodle) {
         this.value = this.value
     }
 
-
-    companion object {
-        private var instance: Repository? = null
-
-        fun getRepository(noodle: Noodle): Repository {
-            return instance ?: synchronized(this) {
-                instance ?: Repository(noodle).also { instance = it }
-            }
-        }
+    fun resetTodosLiveData() {
+        _todos.value = null
     }
-
 
 }
