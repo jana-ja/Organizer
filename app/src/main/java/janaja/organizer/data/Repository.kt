@@ -9,7 +9,10 @@ class Repository(val database: AppDatabase) {
 
     // livedata
     val roomTodos: LiveData<List<RoomTodo>> = database.roomTodoDao.getAllLiveData()
-    val roomTodoLines: LiveData<List<RoomTodoLine>> = database.roomTodoLineDao.getAll()
+
+    private val _finishedUpdating: MutableLiveData<Boolean> = MutableLiveData(true)
+    val finishedUpdating: LiveData<Boolean>
+        get() = _finishedUpdating
 
     private val _todos = MutableLiveData<MutableList<Todo>?>()
     val todos: LiveData<MutableList<Todo>?>
@@ -101,6 +104,7 @@ class Repository(val database: AppDatabase) {
     }
 
     suspend fun updateTodo(todo: Todo) {
+        _finishedUpdating.value = false
         // update todo_lines in db
         val roomTodoLines = todo.body.map { todoLine -> todoLine.toRoomTodoLine(todo.id) }
         database.roomTodoLineDao.deleteAllByTodoId(todo.id)
@@ -110,6 +114,7 @@ class Repository(val database: AppDatabase) {
 
         // update todo_in db
         database.roomTodoDao.update(todo.toRoomTodo())
+        _finishedUpdating.value = true
     }
 
 

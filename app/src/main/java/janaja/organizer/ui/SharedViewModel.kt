@@ -8,7 +8,6 @@ import janaja.organizer.data.Repository
 import janaja.organizer.data.local.getDatabase
 import janaja.organizer.data.model.Note
 import janaja.organizer.data.model.RoomTodo
-import janaja.organizer.data.model.RoomTodoLine
 import janaja.organizer.data.model.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +20,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     val todos: LiveData<MutableList<Todo>?> = repository.todos
     val roomTodos: LiveData<List<RoomTodo>> = repository.roomTodos
     val detailTodo = repository.detailTodo
+    val finishedUpdating = repository.finishedUpdating
 
 
 

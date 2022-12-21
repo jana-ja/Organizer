@@ -70,7 +70,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
         // because roomTodos still contains a value that is immediately observed
         // and then again observed when updating data from the detail screen is finished
         viewModel.roomTodos.observe(viewLifecycleOwner){
-            viewModel.convertAllTodos(it)
+            if(viewModel.finishedUpdating.value!!)
+                viewModel.convertAllTodos(it)
         }
 
         // TODO this solution does not show content of todo right when coming back from a detail screen
