@@ -72,10 +72,6 @@ class Repository(val database: AppDatabase) {
         _todos.postValue(convertedTodos)
     }
 
-    private fun checkTodoReset() {
-        todos.value?.forEach { it.tryReset() } // TODO id reset true update todo in db
-    }
-
     suspend fun loadTodo(id: Long) {
         val roomTodo = database.roomTodoDao.getById(id)
         val roomBody = database.roomTodoLineDao.getAllForTodoId(roomTodo.id)
@@ -84,7 +80,9 @@ class Repository(val database: AppDatabase) {
 
     private fun convertRoomTodoToTodo(roomTodo: RoomTodo, roomBody: List<RoomTodoLine>): Todo {
         val body = roomBody.map { roomTodoLine -> roomTodoLine.toTodoLine() }.toMutableList()
-        return roomTodo.toTodo(body) // TODO hier direkt check reset einbaun
+        val todo = roomTodo.toTodo(body)
+        todo.tryReset() // TODO update todo in db if resetted
+        return todo
     }
 
     fun unloadDetailTodo() {
