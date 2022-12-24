@@ -114,8 +114,9 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         viewModel.resetTodosLiveData()
+        actionMode?.finish()
+        super.onDestroyView()
     }
 
     private val actionModeCallback = object : ActionMode.Callback {
@@ -154,5 +155,4 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
         viewModel.updateTodo(todo)
     }
 
-    // TODO on destroy reset select count and top bar action mode
 }
