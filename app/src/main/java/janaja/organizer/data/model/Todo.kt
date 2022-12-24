@@ -21,7 +21,7 @@ class Todo(
     // TODO testing and exception handling
 
     fun tryReset(): Boolean{
-        return if(lastResetTimeString.length != 13){
+        return if(lastResetTimeString.length < 12 || lastResetTimeString.length > 13){ // 12 or 13 digits long
             false
         } else {
             // parse time
