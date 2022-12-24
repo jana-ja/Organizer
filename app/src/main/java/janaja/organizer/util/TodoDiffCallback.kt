@@ -3,7 +3,7 @@ package janaja.organizer.util
 import androidx.recyclerview.widget.DiffUtil
 import janaja.organizer.data.model.Todo
 
-class TodoDiffCallback(private val oldList: List<Todo>, private val newList: List<Todo>): DiffUtil.Callback() {
+class TodoDiffCallback(private val oldList: List<Todo>, private val newList: List<Todo>) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldList.size
@@ -18,8 +18,16 @@ class TodoDiffCallback(private val oldList: List<Todo>, private val newList: Lis
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        // TODO muss vllt detaillierter
-        return oldList[oldItemPosition] == newList[newItemPosition]
+        val oldBody = oldList[oldItemPosition].body
+        val newBody = newList[newItemPosition].body
+        // check lines of body
+        if (oldBody.size != newBody.size)
+            return false
+        for (i in oldBody.indices) {
+            if (oldBody[i].isChecked != newBody[i].isChecked)
+                return false
+        }
+        return true
     }
 
 }
