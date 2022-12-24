@@ -78,10 +78,12 @@ class Repository(val database: AppDatabase) {
         _detailTodo.value = convertRoomTodoToTodo(roomTodo, roomBody)
     }
 
-    private fun convertRoomTodoToTodo(roomTodo: RoomTodo, roomBody: List<RoomTodoLine>): Todo {
+    private suspend fun convertRoomTodoToTodo(roomTodo: RoomTodo, roomBody: List<RoomTodoLine>): Todo {
         val body = roomBody.map { roomTodoLine -> roomTodoLine.toTodoLine() }.toMutableList()
         val todo = roomTodo.toTodo(body)
-        todo.tryReset() // TODO update todo in db if resetted
+        if(todo.tryReset()){
+            updateTodo(todo)
+        }
         return todo
     }
 
