@@ -25,6 +25,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
     var actionMode: ActionMode? = null
     var noteAdapter: HomeNoteRVA? = null
 
+    private var finishedInit = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,7 +37,7 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        finishedInit = false
         // top app bar menu
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -80,9 +82,12 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
         binding.cvHomeReminders.setRvAdapterInterface(this)
 
         // when returning from a todos detail screen we need to wait until updating is finished
+        // and don't reload all data on every single update, only when initializing the view
         viewModel.finishedUpdating.observe(viewLifecycleOwner){
-            if(it)
+            if(it && !finishedInit) {
                 viewModel.loadAndConvertAllTodos()
+                finishedInit = true
+            }
         }
 
         viewModel.todos.observe(viewLifecycleOwner) {
@@ -90,8 +95,6 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
                 binding.cvHomeReminders.updateTodoRecyclerViewAdapter(it)
             }
         }
-
-
 
     }
 
