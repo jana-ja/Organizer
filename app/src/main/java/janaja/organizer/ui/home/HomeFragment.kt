@@ -11,11 +11,12 @@ import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.HomeNoteRVA
 import janaja.organizer.data.model.Note
+import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
 import kotlin.random.Random
 
-class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
+class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoInterface {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: SharedViewModel by activityViewModels()
@@ -56,6 +57,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
 
         viewModel.initDbIfEmpty()
 
+        // NOTES
+
         viewModel.notes.observe(viewLifecycleOwner){ notes ->
             if(noteAdapter == null) {
                 noteAdapter = HomeNoteRVA(notes, this).also {
@@ -65,6 +68,16 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
                 noteAdapter!!.updateList()
             }
         }
+
+        binding.cvHomeNotes.setAddbuttonOnClickListener {
+            // TODO dummy data id
+            val id = Random.nextLong()
+            viewModel.addNote(Note(id))
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(id))
+        }
+
+        // TODOS
+        binding.cvHomeReminders.setRvAdapterInterface(this)
 
         // when returning from a todos detail screen we need to wait until updating is finished
         viewModel.finishedUpdating.observe(viewLifecycleOwner){
@@ -78,11 +91,7 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
             }
         }
 
-        binding.cvHomeNotes.setAddbuttonOnClickListener{
-            // TODO dummy data id
-            val id = Random.nextLong()
-            viewModel.addNote(Note(id))
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(id))}
+
 
     }
 
@@ -140,4 +149,10 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler {
         }
 
     }
+
+    override fun updateTodo(todo: Todo) {
+        viewModel.updateTodo(todo)
+    }
+
+    // TODO on destroy reset select count and top bar action mode
 }

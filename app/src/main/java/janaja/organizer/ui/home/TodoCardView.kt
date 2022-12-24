@@ -52,6 +52,9 @@ class TodoCardView(context: Context, attrs: AttributeSet) : CardView(context, at
         adapter = HomeTodoRVA(mutableListOf())
         contentBinding.rvHomeCardviewNotes.adapter = adapter
     }
+    fun setRvAdapterInterface(homeTodoInterface: HomeTodoInterface){
+        adapter.setInterface(homeTodoInterface)
+    }
 
     fun updateTodoRecyclerViewAdapter(todos: MutableList<Todo>){
         adapter.updateList(todos)

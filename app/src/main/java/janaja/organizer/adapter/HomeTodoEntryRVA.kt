@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.TodoLine
 
-class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>) : RecyclerView.Adapter<HomeTodoEntryRVA.ItemViewHolder>() {
+class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>, val updateTodo: () -> Unit) : RecyclerView.Adapter<HomeTodoEntryRVA.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lineText: TextView = view.findViewById(R.id.note_entry_line)
@@ -47,6 +47,7 @@ class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>) : RecyclerView.Adapte
             } else {
                 holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
+            updateTodo()
         }
 
         if (line.repeat) {

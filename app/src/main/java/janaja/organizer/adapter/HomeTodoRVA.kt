@@ -12,12 +12,18 @@ import com.google.android.material.card.MaterialCardView
 import janaja.organizer.R
 import janaja.organizer.data.model.Todo
 import janaja.organizer.ui.home.HomeFragmentDirections
+import janaja.organizer.ui.home.HomeTodoInterface
 import janaja.organizer.util.TodoDiffCallback
 
 class HomeTodoRVA(private var dataset: MutableList<Todo>) :
     RecyclerView.Adapter<HomeTodoRVA.ItemViewHolder>() {
 
     private var oldList = dataset.toList()
+    private lateinit var homeTodoInterface: HomeTodoInterface
+
+    fun setInterface(homeTodoInterface: HomeTodoInterface) {
+        this.homeTodoInterface = homeTodoInterface
+    }
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
@@ -33,6 +39,7 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
         }
         oldList = dataset.toList()
     }
+
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.todo_title)
@@ -51,7 +58,7 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
         val todo = dataset[position]
         holder.title.text = todo.title
 
-        holder.bodyRv.adapter = HomeTodoEntryRVA(todo.body)
+        holder.bodyRv.adapter = HomeTodoEntryRVA(todo.body) { homeTodoInterface.updateTodo(todo) }
 
         // recyclerview and its parent card view should have the same behaviour
         manageNavigationClickListeners(holder, position)
@@ -102,4 +109,6 @@ class HomeTodoRVA(private var dataset: MutableList<Todo>) :
             )
         }
     }
+
+
 }
