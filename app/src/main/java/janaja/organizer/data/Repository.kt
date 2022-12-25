@@ -92,7 +92,7 @@ class Repository(val database: AppDatabase) {
     }
 
     suspend fun updateTodo(todo: Todo) {
-        _finishedUpdating.value = false
+        _finishedUpdating.postValue(false)
         // update todo_lines in db
         val roomTodoLines = todo.body.map { todoLine -> todoLine.toRoomTodoLine(todo.id) }
         database.roomTodoLineDao.deleteAllByTodoId(todo.id)
@@ -102,7 +102,7 @@ class Repository(val database: AppDatabase) {
 
         // update todo_in db
         database.roomTodoDao.update(todo.toRoomTodo())
-        _finishedUpdating.value = true
+        _finishedUpdating.postValue(true)
     }
 
 
