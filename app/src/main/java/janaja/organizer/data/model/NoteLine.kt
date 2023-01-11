@@ -2,7 +2,6 @@ package janaja.organizer.data.model
 
 
 class NoteLine(
-    var id: Long,
     var text: String,
     var isChecked: Boolean = false
 ) {
@@ -17,6 +16,6 @@ class NoteLine(
     }
 
     fun copyLine(): NoteLine {
-        return NoteLine(id,text,isChecked)
+        return NoteLine(text,isChecked)
     }
 }

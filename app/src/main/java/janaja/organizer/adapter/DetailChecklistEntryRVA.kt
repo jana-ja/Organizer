@@ -11,7 +11,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.NoteLine
-import kotlin.random.Random
 
 class DetailChecklistEntryRVA(var dataset: MutableList<NoteLine>) :
     RecyclerView.Adapter<DetailChecklistEntryRVA.ItemViewHolder>() {
@@ -26,7 +25,7 @@ class DetailChecklistEntryRVA(var dataset: MutableList<NoteLine>) :
 
     fun addLine(position: Int, line: String) {
         // TODO richtige ID
-        dataset.add(position, NoteLine(Random.nextLong(), line, false))
+        dataset.add(position, NoteLine(line, false))
         notifyItemInserted(position)
     }
 

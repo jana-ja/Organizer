@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.NoteLine
-import kotlin.random.Random
 
 class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>() {
 
@@ -20,7 +19,7 @@ class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.A
 
     fun addLine(position: Int, line: String) {
         // TODO richtige ID
-        dataset.add(position, NoteLine(Random.nextLong(), line, false))
+        dataset.add(position, NoteLine(line, false))
         notifyItemInserted(position)
     }
 

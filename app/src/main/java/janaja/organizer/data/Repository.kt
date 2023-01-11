@@ -21,22 +21,17 @@ class Repository(val database: AppDatabase) {
 
     val dummyNoteData: MutableLiveData<MutableList<Note>> = MutableLiveData(
         mutableListOf(
-            Note(0, "Title", mutableListOf(NoteLine(0, "Body"))),
-            Note(1, "Title Haha", mutableListOf(NoteLine(1, "ICh mache nOtiz"), NoteLine(2, "Super toll")), true),
-            Note(2, "Wow", mutableListOf(NoteLine(3, "GuNa"), NoteLine(4, "hehe"), NoteLine(5, "länger"))),
-            Note(3, "Kaufen", mutableListOf(NoteLine(6, "Spa"))),
+            Note(0, "Title", mutableListOf(NoteLine("Body"))),
+            Note(1, "Title Haha", mutableListOf(NoteLine("ICh mache nOtiz"), NoteLine("Super toll")), true),
+            Note(2, "Wow", mutableListOf(NoteLine("GuNa"), NoteLine("hehe"), NoteLine("länger"))),
+            Note(3, "Kaufen", mutableListOf(NoteLine("Spa"))),
             Note(
                 4,
                 "Kaufen",
                 mutableListOf(
-                    NoteLine(7, "Spaghetti"),
-                    NoteLine(8, "Hände"),
-                    NoteLine(9, "Tomaten"),
-                    NoteLine(10, "brrrr"),
-                    NoteLine(11, "Spaghetti"),
-                    NoteLine(12, "Hände"),
-                    NoteLine(13, "Tomaten"),
-                    NoteLine(14, "brrrr")
+                    NoteLine("Spaghetti"),
+                    NoteLine("Hände"),
+                    NoteLine("Tomaten")
                 )
             ),
         )

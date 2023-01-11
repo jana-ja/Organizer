@@ -12,7 +12,6 @@ import janaja.organizer.adapter.DetailChecklistEntryRVA
 import janaja.organizer.data.model.NoteLine
 import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.FragmentNoteDetailBinding
-import kotlin.random.Random
 
 class NoteDetailFragment : Fragment() {
 
@@ -79,7 +78,7 @@ class NoteDetailFragment : Fragment() {
             } else {
                 val body = binding.detailNoteBody.text.toString()
                 // TODO richtige ID
-                note!!.body = body.split("\n").map { s -> NoteLine(Random.nextLong(),s, false) }.toMutableList()
+                note!!.body = body.split("\n").map { s -> NoteLine(s, false) }.toMutableList()
             }
             viewModel.updateNote(note!!)
         }
