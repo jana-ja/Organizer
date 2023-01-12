@@ -18,4 +18,8 @@ class NoteLine(
     fun copyLine(): NoteLine {
         return NoteLine(text,isChecked)
     }
+
+    fun toRoomNoteLine(noteId: Long): RoomNoteLine{
+        return RoomNoteLine(text, isChecked, noteId)
+    }
 }

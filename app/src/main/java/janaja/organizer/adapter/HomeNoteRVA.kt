@@ -17,14 +17,15 @@ import com.google.android.material.card.MaterialCardView
 import janaja.organizer.R
 import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
+import janaja.organizer.ui.home.HomeNoteInterface
 import janaja.organizer.util.NoteDiffCallback
 import kotlinx.coroutines.*
 
-open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler) :
+open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler, private val homeNoteInterface: HomeNoteInterface) :
     RecyclerView.Adapter<HomeNoteRVA.ItemViewHolder>() {
 
     var oldList = dataset.toList()
-    var selected: MutableList<Boolean> = MutableList(dataset.size){false}
+    private var selectedIndices: MutableList<Boolean> = MutableList(dataset.size){false}
     private lateinit var mRecyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -64,11 +65,19 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
-        selected = MutableList(dataset.size){false}
+        selectedIndices = MutableList(dataset.size){false}
         NoteDiffCallback(oldList, dataset).also{
             DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
         }
         oldList = dataset.toList()
+    }
+
+    fun getSelectedIds() : List<Long>{
+        val selectedIDs = mutableListOf<Long>()
+        for (i in selectedIndices.indices){
+            if(selectedIndices[i]) selectedIDs.add(dataset[i].id)
+        }
+        return selectedIDs
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -76,16 +85,13 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         val note = dataset[position]
 
         val onClick: (View) -> Unit = {
-            Log.i("onClick", "selected count: ${selected.count{it}}")
-            if(selected.count{it} > 0)
+            Log.i("onClick", "selected count: ${selectedIndices.count{it}}")
+            if(selectedIndices.count{it} > 0)
                 onLongClick(holder)
             else {
+                homeNoteInterface.loadNote(note.id)
                 val navController = holder.itemView.findNavController()
-                navController.navigate(
-                    HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(
-                        note.id
-                    )
-                )
+                navController.navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment())
             }
         }
 
@@ -126,8 +132,8 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
 
     private fun onLongClick(holder: ItemViewHolder){
         val position = holder.layoutPosition // maybe adapterPosition??
-        Log.i("onLongClick","selected: ${selected[position]}")
-        if(selected[position]){
+        Log.i("onLongClick","selected: ${selectedIndices[position]}")
+        if(selectedIndices[position]){
             // is already selected
             holder.card.strokeWidth = 0
             val typedValue = TypedValue()
@@ -142,8 +148,8 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
             theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceVariant, typedValue, true)
             holder.noteCl.setBackgroundColor(typedValue.data)
         }
-        selected[position] = !selected[position]
-        handler.selectAction(selected.count{it})
+        selectedIndices[position] = !selectedIndices[position]
+        handler.performSelectAction(selectedIndices.count{it})
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -152,21 +158,21 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
     }
 
     fun unselectAll(){
-        for (i in selected.indices){
-            if(selected[i]){
+        for (i in selectedIndices.indices){
+            if(selectedIndices[i]){
                 val holder = mRecyclerView.getChildViewHolder(mRecyclerView.getChildAt(i)) as ItemViewHolder
                 holder.card.strokeWidth = 0
                 val typedValue = TypedValue()
                 val theme: Theme = holder.itemView.context.theme
                 theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
                 holder.noteCl.setBackgroundColor(typedValue.data)
-                selected[i] = false
+                selectedIndices[i] = false
             }
         }
 
     }
 
     interface ContextualAppBarHandler{
-        fun selectAction(selectCount: Int)
+        fun performSelectAction(selectCount: Int)
     }
 }

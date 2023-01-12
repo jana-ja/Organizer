@@ -27,21 +27,21 @@ class NoteDetailFragment : Fragment() {
     ): View {
         binding = FragmentNoteDetailBinding.inflate(inflater)
 
-        val noteId = requireArguments().getLong("noteId")
-        val note = viewModel.getNote(noteId)
-
-        if(note != null) {
-            this.note = note
-            binding.detailNoteTitle.setText(note.title)
-            if(note.isCheckList){
-                binding.detailNoteBody.visibility = View.GONE
-                binding.detailNoteBodyRv.visibility = View.VISIBLE
-                adapter = DetailChecklistEntryRVA(note.body)
-                binding.detailNoteBodyRv.adapter = adapter
-            } else {
-                binding.detailNoteBody.setText(note.body.joinToString(separator = "\n"))
+        viewModel.detailNote.observe(viewLifecycleOwner){ note ->
+            if(note != null) {
+                this.note = note
+                binding.detailNoteTitle.setText(note.title)
+                if(note.isCheckList){
+                    binding.detailNoteBody.visibility = View.GONE
+                    binding.detailNoteBodyRv.visibility = View.VISIBLE
+                    adapter = DetailChecklistEntryRVA(note.body)
+                    binding.detailNoteBodyRv.adapter = adapter
+                } else {
+                    binding.detailNoteBody.setText(note.body.joinToString(separator = "\n"))
+                }
             }
         }
+
 
 
         return binding.root
@@ -77,7 +77,6 @@ class NoteDetailFragment : Fragment() {
                 note!!.body = adapter.getAllLines()
             } else {
                 val body = binding.detailNoteBody.text.toString()
-                // TODO richtige ID
                 note!!.body = body.split("\n").map { s -> NoteLine(s, false) }.toMutableList()
             }
             viewModel.updateNote(note!!)

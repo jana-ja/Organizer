@@ -10,13 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.HomeNoteRVA
-import janaja.organizer.data.model.Note
 import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
-import kotlin.random.Random
 
-class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoInterface {
+class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoInterface, HomeNoteInterface {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: SharedViewModel by activityViewModels()
@@ -61,9 +59,18 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
         // NOTES
 
+        // when returning from a todos detail screen we need to wait until updating is finished
+        // and don't reload all data on every single update, only when initializing the view
+        viewModel.finishedUpdatingNote.observe(viewLifecycleOwner){
+            if(it ){//&& !finishedInit) {
+                viewModel.loadAndConvertAllNotes()
+                finishedInit = true
+            }
+        }
+
         viewModel.notes.observe(viewLifecycleOwner){ notes ->
-            if(noteAdapter == null) {
-                noteAdapter = HomeNoteRVA(notes, this).also {
+            if(noteAdapter == null && notes != null) {
+                noteAdapter = HomeNoteRVA(notes, this, this).also {
                     binding.cvHomeNotes.setNoteRecyclerViewAdapter(it)
                 }
             } else {
@@ -72,10 +79,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
         }
 
         binding.cvHomeNotes.setAddbuttonOnClickListener {
-            // TODO dummy data id
-            val id = Random.nextLong()
-            viewModel.addNote(Note(id))
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment(id))
+            viewModel.addNote()
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToNoteDetailFragment())
         }
 
         // TODOS
@@ -83,8 +88,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
         // when returning from a todos detail screen we need to wait until updating is finished
         // and don't reload all data on every single update, only when initializing the view
-        viewModel.finishedUpdating.observe(viewLifecycleOwner){
-            if(it && !finishedInit) {
+        viewModel.finishedUpdatingTodo.observe(viewLifecycleOwner){
+            if(it){// && !finishedInit) {
                 viewModel.loadAndConvertAllTodos()
                 finishedInit = true
             }
@@ -98,7 +103,7 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
     }
 
-    override fun selectAction(selectCount: Int) {
+    override fun performSelectAction(selectCount: Int) {
         this.selectCount = selectCount
         if (selectCount == 0) {
             // nothing selected
@@ -138,7 +143,7 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
                 R.id.card_selected_menu_delete -> {
                     // TODO delete per ids, not indices
                     // TODO bestätigung dialog
-                    noteAdapter?.selected?.let { viewModel.deleteNotes(it) }
+                    noteAdapter?.let { viewModel.deleteNotes(it.getSelectedIds()) }
                     mode?.finish()
                     true
                 }
@@ -156,6 +161,10 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
     override fun updateTodo(todo: Todo) {
         viewModel.updateTodo(todo)
+    }
+
+    override fun loadNote(noteId: Long) {
+        viewModel.loadNote(noteId)
     }
 
 }

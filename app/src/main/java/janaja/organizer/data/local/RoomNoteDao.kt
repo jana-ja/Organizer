@@ -15,7 +15,7 @@ interface RoomNoteDao {
     suspend fun insertAll(notes: List<RoomNote>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(note: RoomNote)
+    suspend fun insert(note: RoomNote): Long
 
     @Update
     suspend fun update(note: RoomNote)
@@ -29,8 +29,8 @@ interface RoomNoteDao {
     @Query("SELECT * FROM RoomNote WHERE id = :id")
     suspend fun getById(id: Long) : RoomNote
 
-    @Query("DELETE FROM RoomNote")
-    suspend fun deleteAll()
+    @Query("DELETE FROM RoomNote WHERE id IN (:ids)")
+    suspend fun deletebyIds(ids: List<Long>)
 
     @Query("DELETE FROM RoomNote WHERE id = :id")
     suspend fun deleteById(id: Long)

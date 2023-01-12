@@ -6,11 +6,12 @@ import androidx.room.PrimaryKey
 @Entity
 data class RoomNote(
     @PrimaryKey(autoGenerate = true)
-    var id: Long,
+    var id: Long = 0,
     var title: String = "",
     var isCheckList: Boolean = false
 ) {
-    fun toNote(body: MutableList<NoteLine>, categories: MutableList<Category>): Note {
-        return Note(id, title, body, isCheckList, categories)
+    // TODO add categories to db
+    fun toNote(body: MutableList<NoteLine>/*, categories: MutableList<Category>*/): Note {
+        return Note(id, title, body, isCheckList, mutableListOf())//, categories)
     }
 }

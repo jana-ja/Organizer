@@ -5,13 +5,13 @@ import androidx.room.PrimaryKey
 
 @Entity
 class RoomNoteLine(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long,
     var text: String,
     var isChecked: Boolean = false,
-    var noteId: Long
+    var noteId: Long,
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
 ) {
-    fun toNoteLine(): NoteLine{
+    fun toNoteLine(): NoteLine {
         return NoteLine(text, isChecked)
     }
 }

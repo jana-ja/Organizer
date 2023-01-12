@@ -15,10 +15,12 @@ import kotlinx.coroutines.launch
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = Repository(getDatabase(application))
-    val notes: LiveData<MutableList<Note>> = repository.dummyNoteData
+    val notes: LiveData<MutableList<Note>?> = repository.notes
+    val detailNote = repository.detailNote
     val todos: LiveData<MutableList<Todo>?> = repository.todos
     val detailTodo = repository.detailTodo
-    val finishedUpdating = repository.finishedUpdating
+    val finishedUpdatingTodo = repository.finishedUpdatingTodo
+    val finishedUpdatingNote = repository.finishedUpdatingNote
 
 
 
@@ -28,19 +30,23 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun deleteNotes(selected: List<Boolean>) {
-        val indices: MutableList<Int> = mutableListOf()
-        for (i in selected.indices)
-            if (selected[i]) indices.add(i)
-        repository.deleteNotes(indices)
+    fun deleteNotes(selectedIds: List<Long>) {
+        viewModelScope.launch {
+            repository.deleteNotes(selectedIds)
+
+        }
     }
 
-    fun addNote(note: Note) {
-        repository.addNote(note)
+    fun addNote() {
+        viewModelScope.launch {
+            repository.addNote()
+        }
     }
 
     fun updateNote(note: Note) {
-        repository.updateNote(note)
+        viewModelScope.launch {
+            repository.updateNote(note)
+        }
     }
 
     fun updateTodo(todo: Todo) {
@@ -55,6 +61,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun loadAndConvertAllNotes(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.loadAndConvertAllNotes()
+        }
+    }
+
     fun loadTodo(id: Long){
         viewModelScope.launch {
             repository.loadTodo(id)
@@ -65,8 +77,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         repository.unloadDetailTodo()
     }
 
-    fun getNote(noteId: Long): Note? {
-        return repository.getNote(noteId)
+    fun loadNote(noteId: Long) {
+        viewModelScope.launch {
+            repository.loadNote(noteId)
+        }
     }
 
     fun resetTodosLiveData() {
