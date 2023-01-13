@@ -49,7 +49,7 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         if (note.isCheckList) {
             holder.body.visibility = View.GONE
             holder.bodyRv.visibility = View.VISIBLE
-            holder.bodyRv.adapter = HomeChecklistEntryRVA(note.body)
+            holder.bodyRv.adapter = HomeChecklistEntryRVA(note.body) { homeNoteInterface.updateNote(note) }
         } else {
             holder.body.text = note.body.joinToString(separator = "\n")
         }

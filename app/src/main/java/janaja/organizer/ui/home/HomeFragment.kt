@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import janaja.organizer.R
 import janaja.organizer.adapter.HomeNoteRVA
+import janaja.organizer.data.model.Note
 import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.FragmentHomeBinding
 import janaja.organizer.ui.SharedViewModel
@@ -162,6 +163,10 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
     override fun loadNote(noteId: Long) {
         viewModel.loadNote(noteId)
+    }
+
+    override fun updateNote(note: Note) {
+        viewModel.updateNote(note)
     }
 
 }

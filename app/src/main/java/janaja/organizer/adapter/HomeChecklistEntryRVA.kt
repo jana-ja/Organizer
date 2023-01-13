@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.NoteLine
 
-class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>() {
+class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>, var updateNote: () -> Unit) : RecyclerView.Adapter<HomeChecklistEntryRVA.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val lineText: TextView = view.findViewById(R.id.note_entry_line)
@@ -46,6 +46,7 @@ class HomeChecklistEntryRVA(var dataset: MutableList<NoteLine>) : RecyclerView.A
             } else {
                 holder.lineText.paintFlags = holder.lineText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
+            updateNote()
         }
     }
 
