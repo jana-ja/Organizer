@@ -71,7 +71,14 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         }
         oldList = dataset.toList()
     }
-
+    fun updateList(notes: MutableList<Note>) {
+        dataset = notes
+        NoteDiffCallback(oldList, dataset).also {
+            DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
+        }
+        oldList = dataset.toList()
+    }
+    
     fun getSelectedIds() : List<Long>{
         val selectedIDs = mutableListOf<Long>()
         for (i in selectedIndices.indices){

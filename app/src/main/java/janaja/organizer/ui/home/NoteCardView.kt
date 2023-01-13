@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import janaja.organizer.R
 import janaja.organizer.adapter.CategorySpinnerAdapter
 import janaja.organizer.adapter.HomeNoteRVA
+import janaja.organizer.data.model.Note
 import janaja.organizer.databinding.HomeCardviewBinding
 import janaja.organizer.databinding.NoteCardviewContentBinding
 import janaja.organizer.databinding.NoteCardviewHeaderBinding
@@ -18,6 +19,7 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
     private val binding: HomeCardviewBinding
     private val headerBinding: NoteCardviewHeaderBinding
     private val contentBinding: NoteCardviewContentBinding
+    private lateinit var adapter: HomeNoteRVA
 
     init {
         binding = DataBindingUtil.inflate(
@@ -49,9 +51,15 @@ class NoteCardView(context: Context, attrs: AttributeSet) : CardView(context, at
             binding.flHomeCardviewContent,
             true
         )
+
+    }
+
+    fun updateNoteRecyclerViewAdapter(notes: MutableList<Note>){
+        adapter.updateList(notes)
     }
 
     fun setNoteRecyclerViewAdapter(adapter: HomeNoteRVA) {
+        this.adapter = adapter
         contentBinding.rvHomeCardviewNotes.adapter = adapter
     }
 

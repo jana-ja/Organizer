@@ -68,13 +68,10 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
             }
         }
 
+        binding.cvHomeNotes.setNoteRecyclerViewAdapter(HomeNoteRVA(mutableListOf(), this, this))
         viewModel.notes.observe(viewLifecycleOwner){ notes ->
-            if(noteAdapter == null && notes != null) {
-                noteAdapter = HomeNoteRVA(notes, this, this).also {
-                    binding.cvHomeNotes.setNoteRecyclerViewAdapter(it)
-                }
-            } else {
-                noteAdapter!!.updateList()
+            if(notes != null) {
+                binding.cvHomeNotes.updateNoteRecyclerViewAdapter(notes)
             }
         }
 
