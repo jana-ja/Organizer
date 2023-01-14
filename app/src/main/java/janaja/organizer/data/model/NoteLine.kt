@@ -9,17 +9,25 @@ class NoteLine(
         return text
     }
 
-    fun equalContent(line: NoteLine): Boolean {
-        if(text != line.text || isChecked != line.isChecked)
-            return false
-        return true
-    }
-
     fun copyLine(): NoteLine {
         return NoteLine(text,isChecked)
     }
 
     fun toRoomNoteLine(noteId: Long): RoomNoteLine{
         return RoomNoteLine(text, isChecked, noteId)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other !is  NoteLine)
+            return false
+        if(text != other.text || isChecked != other.isChecked)
+            return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = text.hashCode()
+        result = 31 * result + isChecked.hashCode()
+        return result
     }
 }

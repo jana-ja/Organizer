@@ -19,13 +19,18 @@ import janaja.organizer.data.model.Note
 import janaja.organizer.ui.home.HomeFragmentDirections
 import janaja.organizer.ui.home.HomeNoteInterface
 import janaja.organizer.util.NoteDiffCallback
+import janaja.organizer.util.TestUpdatecallback
 import kotlinx.coroutines.*
 
-open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: ContextualAppBarHandler, private val homeNoteInterface: HomeNoteInterface) :
+open class HomeNoteRVA(
+    var dataset: MutableList<Note>,
+    private val handler: ContextualAppBarHandler,
+    private val homeNoteInterface: HomeNoteInterface
+) :
     RecyclerView.Adapter<HomeNoteRVA.ItemViewHolder>() {
 
     var oldList = dataset.toList()
-    private var selectedIndices: MutableList<Boolean> = MutableList(dataset.size){false}
+    private var selectedIndices: MutableList<Boolean> = MutableList(dataset.size) { false }
     private lateinit var mRecyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,6 +40,7 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         val card: MaterialCardView = view.findViewById(R.id.todo_card)
         val noteCl: ConstraintLayout = view.findViewById(R.id.todo_cl)
     }
+
     var job: Job? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -65,24 +71,40 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
 
     // called after dataset changed to display changes using DiffUtil
     fun updateList() {
-        selectedIndices = MutableList(dataset.size){false}
-        NoteDiffCallback(oldList, dataset).also{
-            DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
-        }
-        oldList = dataset.toList()
-    }
-    fun updateList(notes: MutableList<Note>) {
-        dataset = notes
+        selectedIndices = MutableList(dataset.size) { false }
         NoteDiffCallback(oldList, dataset).also {
             DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)
         }
         oldList = dataset.toList()
     }
-    
-    fun getSelectedIds() : List<Long>{
+
+
+    private fun List<Note>.prettyPrint(): String {
+        var string = ""
+        for (i in this.indices){
+            string += "\t$i: ${this[i]}\n"
+        }
+        return string
+    }
+
+    // for debug of diffcallback
+    private val testUpdatecallback: TestUpdatecallback = TestUpdatecallback()
+    fun updateList(notes: MutableList<Note>) {
+        selectedIndices = MutableList(notes.size) { false }
+        //Log.i("lol", "old:\n ${oldList.prettyPrint()}")
+        //Log.i("lol", "new:\n ${notes.prettyPrint()}")
+        dataset = notes
+        // for debug: notifyDataSetChanged()
+        NoteDiffCallback(oldList, dataset).also {
+            DiffUtil.calculateDiff(it, false).dispatchUpdatesTo(this)// for debug: testUpdatecallback)
+        }
+        oldList = dataset.toList()
+    }
+
+    fun getSelectedIds(): List<Long> {
         val selectedIDs = mutableListOf<Long>()
-        for (i in selectedIndices.indices){
-            if(selectedIndices[i]) selectedIDs.add(dataset[i].id)
+        for (i in selectedIndices.indices) {
+            if (selectedIndices[i]) selectedIDs.add(dataset[i].id)
         }
         return selectedIDs
     }
@@ -92,8 +114,8 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         val note = dataset[position]
 
         val onClick: (View) -> Unit = {
-            Log.i("onClick", "selected count: ${selectedIndices.count{it}}")
-            if(selectedIndices.count{it} > 0)
+            Log.i("onClick", "selected count: ${selectedIndices.count { it }}")
+            if (selectedIndices.count { it } > 0)
                 onLongClick(holder)
             else {
                 homeNoteInterface.loadNote(note.id)
@@ -137,10 +159,10 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         }
     }
 
-    private fun onLongClick(holder: ItemViewHolder){
+    private fun onLongClick(holder: ItemViewHolder) {
         val position = holder.layoutPosition // maybe adapterPosition??
-        Log.i("onLongClick","selected: ${selectedIndices[position]}")
-        if(selectedIndices[position]){
+        Log.i("onLongClick", "selected: ${selectedIndices[position]}")
+        if (selectedIndices[position]) {
             // is already selected
             holder.card.strokeWidth = 0
             val typedValue = TypedValue()
@@ -156,7 +178,7 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
             holder.noteCl.setBackgroundColor(typedValue.data)
         }
         selectedIndices[position] = !selectedIndices[position]
-        handler.performSelectAction(selectedIndices.count{it})
+        handler.performSelectAction(selectedIndices.count { it })
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -164,9 +186,9 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
         mRecyclerView = recyclerView
     }
 
-    fun unselectAll(){
-        for (i in selectedIndices.indices){
-            if(selectedIndices[i]){
+    fun unselectAll() {
+        for (i in selectedIndices.indices) {
+            if (selectedIndices[i]) {
                 val holder = mRecyclerView.getChildViewHolder(mRecyclerView.getChildAt(i)) as ItemViewHolder
                 holder.card.strokeWidth = 0
                 val typedValue = TypedValue()
@@ -179,7 +201,7 @@ open class HomeNoteRVA(var dataset: MutableList<Note>, private val handler: Cont
 
     }
 
-    interface ContextualAppBarHandler{
+    interface ContextualAppBarHandler {
         fun performSelectAction(selectCount: Int)
     }
 }
