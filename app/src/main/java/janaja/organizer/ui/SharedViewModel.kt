@@ -20,7 +20,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     val todos: LiveData<MutableList<Todo>?> = repository.todos
     val detailTodo = repository.detailTodo
     val finishedUpdatingTodo = repository.finishedUpdatingTodo
-    val finishedUpdatingNote = repository.finishedUpdatingNote
+    val finishedNoteDbOperation = repository.finishedNoteDbOperation
 
 
 

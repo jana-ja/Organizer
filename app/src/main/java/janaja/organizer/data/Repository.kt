@@ -21,10 +21,10 @@ class Repository(private val database: AppDatabase) {
     val detailTodo: LiveData<Todo?>
         get() = _detailTodo
 
-    private val _finishedUpdatingNote: MutableLiveData<Boolean> = MutableLiveData(true)
-    val finishedUpdatingNote: LiveData<Boolean>
-        get() = _finishedUpdatingNote
-    
+    private val _finishedNoteDbOperation: MutableLiveData<Boolean> = MutableLiveData(true)
+    val finishedNoteDbOperation: LiveData<Boolean>
+        get() = _finishedNoteDbOperation
+
     private val _notes = MutableLiveData<MutableList<Note>?>()
     val notes: LiveData<MutableList<Note>?>
         get() = _notes
@@ -139,9 +139,11 @@ class Repository(private val database: AppDatabase) {
     }
 
     suspend fun deleteNotes(selectedIds: List<Long>) {
+        _finishedNoteDbOperation.value = false
         database.roomNoteDao.deletebyIds(selectedIds)
 //        selectedIds.reversed().forEach { dummyNoteData.value?.removeAt(it) }
 //        dummyNoteData.notifyObservers()
+        _finishedNoteDbOperation.value = true
     }
 
     suspend fun addNote() {
@@ -154,7 +156,7 @@ class Repository(private val database: AppDatabase) {
     }
 
     suspend fun updateNote(note: Note) {
-        _finishedUpdatingNote.value = false
+        _finishedNoteDbOperation.value = false
         // update note lines
         val roomNoteLines = note.body.map { noteLine -> noteLine.toRoomNoteLine(note.id) }
         database.roomNoteLineDao.deleteAllByNoteId(note.id)
@@ -162,7 +164,7 @@ class Repository(private val database: AppDatabase) {
 
         // update note
         database.roomNoteDao.update(note.toRoomNote())
-        _finishedUpdatingNote.value = true
+        _finishedNoteDbOperation.value = true
     }
 
     fun resetTodosLiveData() {

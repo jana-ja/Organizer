@@ -24,8 +24,6 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
     var actionMode: ActionMode? = null
     var noteAdapter: HomeNoteRVA? = null
 
-    private var finishedInit = false
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +34,6 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        finishedInit = false
         // top app bar menu
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -62,14 +59,15 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
         // when returning from a todos detail screen we need to wait until updating is finished
         // and don't reload all data on every single update, only when initializing the view
-        viewModel.finishedUpdatingNote.observe(viewLifecycleOwner){
-            if(it ){//&& !finishedInit) {
+        viewModel.finishedNoteDbOperation.observe(viewLifecycleOwner){
+            if(it) {
                 viewModel.loadAndConvertAllNotes()
-                finishedInit = true
             }
         }
 
-        binding.cvHomeNotes.setNoteRecyclerViewAdapter(HomeNoteRVA(mutableListOf(), this, this))
+
+        noteAdapter = HomeNoteRVA(mutableListOf(), this, this)
+        binding.cvHomeNotes.setNoteRecyclerViewAdapter(noteAdapter!!)
         viewModel.notes.observe(viewLifecycleOwner){ notes ->
             if(notes != null) {
                 binding.cvHomeNotes.updateNoteRecyclerViewAdapter(notes)
@@ -87,9 +85,8 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
         // when returning from a todos detail screen we need to wait until updating is finished
         // and don't reload all data on every single update, only when initializing the view
         viewModel.finishedUpdatingTodo.observe(viewLifecycleOwner){
-            if(it){// && !finishedInit) {
+            if(it){
                 viewModel.loadAndConvertAllTodos()
-                finishedInit = true
             }
         }
 
