@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_note_detail_checklist"
+        android:contentDescription="@string/menu_button_checklist_description"
+        android:checkable="true"
+        android:icon="@drawable/ic_outline_check_box_24"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_button_checklist_title" />
+    <item
+        android:id="@+id/menu_note_detail_delete"
+        android:contentDescription="@string/menu_button_delete_description"
+        android:icon="@drawable/ic_baseline_delete_24"
+        app:showAsAction="always"
+        android:title="@string/menu_button_delete" />
+
+</menu>

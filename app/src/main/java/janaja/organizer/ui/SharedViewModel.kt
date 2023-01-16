@@ -23,8 +23,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     val finishedNoteDbOperation = repository.finishedNoteDbOperation
 
 
-
-    fun initDbIfEmpty(){
+    fun initDbIfEmpty() {
         viewModelScope.launch {
             repository.initDbIfEmpty()
         }
@@ -55,19 +54,19 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun loadAndConvertAllTodos(){
+    fun loadAndConvertAllTodos() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.loadAndConvertAllTodos()
         }
     }
 
-    fun loadAndConvertAllNotes(){
+    fun loadAndConvertAllNotes() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.loadAndConvertAllNotes()
         }
     }
 
-    fun loadTodo(id: Long){
+    fun loadTodo(id: Long) {
         viewModelScope.launch {
             repository.loadTodo(id)
         }
@@ -85,6 +84,19 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
 
     fun resetTodosLiveData() {
         repository.resetTodosLiveData()
+    }
+
+    fun updateAndSetNote(note: Note) {
+        viewModelScope.launch {
+            repository.updateAndSetNote(note)
+        }
+    }
+
+    fun deleteNote(id: Long) {
+        viewModelScope.launch {
+            repository.deleteNote(id)
+
+        }
     }
 
 }

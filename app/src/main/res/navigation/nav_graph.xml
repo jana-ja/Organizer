@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"
-        android:name="janaja.organizer.ui.NoteDetailFragment"
+        android:name="janaja.organizer.ui.note.NoteDetailFragment"
         android:label="@string/app_name"/>
     <fragment
         android:id="@+id/todoDetailFragment"

@@ -124,7 +124,7 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
 
     private val actionModeCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            mode?.menuInflater?.inflate(R.menu.card_selected_top_app_bar, menu)
+            mode?.menuInflater?.inflate(R.menu.home_card_selected_top_app_bar, menu)
             mode?.title = "$selectCount"
             return true
         }
@@ -136,7 +136,6 @@ class HomeFragment : Fragment(), HomeNoteRVA.ContextualAppBarHandler, HomeTodoIn
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
             return when (item?.itemId) {
                 R.id.card_selected_menu_delete -> {
-                    // TODO delete per ids, not indices
                     // TODO bestätigung dialog
                     noteAdapter?.let { viewModel.deleteNotes(it.getSelectedIds()) }
                     mode?.finish()

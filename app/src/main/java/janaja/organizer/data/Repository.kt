@@ -34,11 +34,11 @@ class Repository(private val database: AppDatabase) {
 
     // dummy data
     private val dummyNoteData: List<Note> = mutableListOf(
-            Note(0, "Title", mutableListOf(NoteLine("Body"))),
-            Note(1, "Title Haha", mutableListOf(NoteLine("ICh mache nOtiz"), NoteLine("Super toll")), true),
-            Note(2, "Wow", mutableListOf(NoteLine("GuNa"), NoteLine("hehe"), NoteLine("länger"))),
-            Note(3, "Kaufen", mutableListOf(NoteLine("Spa"))),
-            Note(4, "Kaufen", mutableListOf(NoteLine("Spaghetti"), NoteLine("Hände"), NoteLine("Tomaten"))),
+        Note(0, "Title", mutableListOf(NoteLine("Body"))),
+        Note(1, "Title Haha", mutableListOf(NoteLine("ICh mache nOtiz"), NoteLine("Super toll")), true),
+        Note(2, "Wow", mutableListOf(NoteLine("GuNa"), NoteLine("hehe"), NoteLine("länger"))),
+        Note(3, "Kaufen", mutableListOf(NoteLine("Spa"))),
+        Note(4, "Kaufen", mutableListOf(NoteLine("Spaghetti"), NoteLine("Hände"), NoteLine("Tomaten"))),
     )
 
 
@@ -98,7 +98,8 @@ class Repository(private val database: AppDatabase) {
     }
 
     suspend fun updateTodo(todo: Todo) {
-        _finishedUpdatingTodo.value = false //.postValue(false)
+        // needs to be postvalue because loadAll runs on IO thread and calls update when its time to reset a_todo
+        _finishedUpdatingTodo.postValue(false)
         // update todo_lines in db
         val roomTodoLines = todo.body.map { todoLine -> todoLine.toRoomTodoLine(todo.id) }
         database.roomTodoLineDao.deleteAllByTodoId(todo.id)
@@ -108,7 +109,7 @@ class Repository(private val database: AppDatabase) {
 
         // update todo_in db
         database.roomTodoDao.update(todo.toRoomTodo())
-        _finishedUpdatingTodo.value = true //postValue(true)
+        _finishedUpdatingTodo.postValue(true)
     }
 
 
@@ -169,6 +170,15 @@ class Repository(private val database: AppDatabase) {
 
     fun resetTodosLiveData() {
         _todos.value = null
+    }
+
+    suspend fun updateAndSetNote(note: Note) {
+        updateNote(note)
+        _detailNote.value = note
+    }
+
+    suspend fun deleteNote(id: Long) {
+        database.roomNoteDao.deleteById(id)
     }
 
 }
