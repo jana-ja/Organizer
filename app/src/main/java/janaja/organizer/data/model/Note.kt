@@ -16,7 +16,7 @@ data class Note(
         if (other !is Note)
             return false
         // check basics
-        if (isCheckList != other.isCheckList || title != other.title || body.size != other.body.size || categories.size != other.categories.size)
+        if (isCheckList != other.isCheckList || isPinned != other.isPinned || title != other.title || body.size != other.body.size || categories.size != other.categories.size)
             return false
         // check body
         for (i in body.indices) {
