@@ -18,12 +18,6 @@ class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>, val updateTodo: () ->
         val checkBox: CheckBox = view.findViewById(R.id.note_entry_checkBox)
     }
 
-    fun addLine(position: Int, line: String) {
-        // TODO richtige ID
-        dataset.add(position, TodoLine( line, false))
-        notifyItemInserted(position)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val itemLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.note_entry_line, parent, false)
@@ -52,6 +46,8 @@ class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>, val updateTodo: () ->
 
         if (line.repeat) {
             holder.lineText.setTypeface(null, Typeface.BOLD)
+        } else {
+            holder.lineText.setTypeface(null, Typeface.NORMAL)
         }
     }
 
