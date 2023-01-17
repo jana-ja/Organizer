@@ -34,7 +34,7 @@ open class HomeNoteRVA(
     private lateinit var mRecyclerView: RecyclerView
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.todo_title)
+        val title: TextView = view.findViewById(R.id.note_title)
         val body: TextView = view.findViewById(R.id.note_body)
         val bodyRv: RecyclerView = view.findViewById(R.id.todo_body_rv)
         val card: MaterialCardView = view.findViewById(R.id.todo_card)

@@ -9,6 +9,7 @@
         style="@style/TextAppearance.Material3.BodyMedium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:gravity="center_vertical"
         android:text="@string/dummy_note_body"
         app:layout_constraintBottom_toBottomOf="parent"

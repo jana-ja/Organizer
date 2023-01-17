@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="cardview_header_height">48dp</dimen>
-    <dimen name="reminder_card_width">140dp</dimen>
+    <dimen name="reminder_card_width">150dp</dimen>
+    <dimen name="card_view_stroke_width" tools:ignore="PxUsage">2px</dimen> <!-- dp will not be displayed equally when set from xml vs from code -->
 </resources>
