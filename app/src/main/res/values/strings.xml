@@ -30,4 +30,6 @@
     <string name="menu_button_checklist_title">Checklist</string>
     <string name="menu_button_delete_description">delete note button</string>
     <string name="menu_button_delete">Delete</string>
+    <string name="menu_button_pin_description">pin note button</string>
+    <string name="menu_button_pin">Pin</string>
 </resources>

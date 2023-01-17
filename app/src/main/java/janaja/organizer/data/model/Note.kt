@@ -5,26 +5,27 @@ data class Note(
     var title: String = "",
     var body: MutableList<NoteLine> = mutableListOf(NoteLine("", false)),
     var isCheckList: Boolean = false,
-    var categories: MutableList<Category> = mutableListOf()
+    var categories: MutableList<Category> = mutableListOf(),
+    var isPinned: Boolean = false
 ) {
     fun toRoomNote(): RoomNote {
-        return RoomNote(id, title, isCheckList)
+        return RoomNote(id, title, isCheckList, isPinned)
     }
 
     override fun equals(other: Any?): Boolean {
-        if(other !is  Note)
+        if (other !is Note)
             return false
         // check basics
-        if(isCheckList != other.isCheckList || title != other.title || body.size != other.body.size || categories.size != other.categories.size)
+        if (isCheckList != other.isCheckList || title != other.title || body.size != other.body.size || categories.size != other.categories.size)
             return false
         // check body
-        for(i in body.indices){
-            if(body[i] != other.body[i])
+        for (i in body.indices) {
+            if (body[i] != other.body[i])
                 return false
         }
         // check categories
-        for(i in categories.indices){
-            if(categories[i] != other.categories[i])
+        for (i in categories.indices) {
+            if (categories[i] != other.categories[i])
                 return false
         }
         return true

@@ -99,4 +99,8 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    fun invalidateDetailNote() {
+        repository.invalidateDetailNote()
+    }
+
 }

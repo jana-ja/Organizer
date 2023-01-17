@@ -35,10 +35,8 @@ class Repository(private val database: AppDatabase) {
     // dummy data
     private val dummyNoteData: List<Note> = mutableListOf(
         Note(0, "Title", mutableListOf(NoteLine("Body"))),
-        Note(1, "Title Haha", mutableListOf(NoteLine("ICh mache nOtiz"), NoteLine("Super toll")), true),
-        Note(2, "Wow", mutableListOf(NoteLine("GuNa"), NoteLine("hehe"), NoteLine("länger"))),
-        Note(3, "Kaufen", mutableListOf(NoteLine("Spa"))),
-        Note(4, "Kaufen", mutableListOf(NoteLine("Spaghetti"), NoteLine("Hände"), NoteLine("Tomaten"))),
+        Note(1, "Title Haha", mutableListOf(NoteLine("Absolut gute Notiz"), NoteLine("Super toll")), true),
+        Note(4, "Kaufen", mutableListOf(NoteLine("Spaghetti"), NoteLine("Hefe"), NoteLine("Tomaten")))
     )
 
 
@@ -51,7 +49,12 @@ class Repository(private val database: AppDatabase) {
 
 
     suspend fun initDbIfEmpty() {
+        _finishedNoteDbOperation.value = false
+        _finishedUpdatingTodo.value = false
         if (database.roomTodoDao.isEmpty()) {
+            dummyTodoData[0].initResetTime(TimePeriod.DAYS, 1, 0, 3) // every day at 3 am
+            dummyTodoData[1].initResetTime(TimePeriod.WEEKS, 1, 1, 3) // every monday at 3 am
+            dummyTodoData[2].initResetTime(TimePeriod.MONTHS, 1, 1, 3) // every months 1st at 3 am
             dummyTodoData.forEach {
                 database.roomTodoDao.insert(it.toRoomTodo())
                 database.roomTodoLineDao.insertAll(it.body.map { todoLine -> todoLine.toRoomTodoLine(it.id) })
@@ -63,6 +66,8 @@ class Repository(private val database: AppDatabase) {
                 database.roomNoteLineDao.insertAll(it.body.map { noteLine -> noteLine.toRoomNoteLine(it.id) })
             }
         }
+        _finishedNoteDbOperation.value = true
+        _finishedUpdatingTodo.value = true
     }
 
     // functions for todos
@@ -125,6 +130,8 @@ class Repository(private val database: AppDatabase) {
             // TODO get categories from db
             convertedNotes.add(convertRoomNoteToNote(it, roomBody))
         }
+        // sort converted notes by pin (pinned ones first)
+        convertedNotes.sortBy { !it.isPinned }
         _notes.postValue(convertedNotes)
     }
 
@@ -162,7 +169,6 @@ class Repository(private val database: AppDatabase) {
         val roomNoteLines = note.body.map { noteLine -> noteLine.toRoomNoteLine(note.id) }
         database.roomNoteLineDao.deleteAllByNoteId(note.id)
         database.roomNoteLineDao.insertAll(roomNoteLines)
-
         // update note
         database.roomNoteDao.update(note.toRoomNote())
         _finishedNoteDbOperation.value = true
@@ -181,4 +187,7 @@ class Repository(private val database: AppDatabase) {
         database.roomNoteDao.deleteById(id)
     }
 
+    fun invalidateDetailNote() {
+        _detailNote.value = null
+    }
 }
