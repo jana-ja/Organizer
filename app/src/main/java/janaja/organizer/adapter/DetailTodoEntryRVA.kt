@@ -18,6 +18,7 @@ import janaja.organizer.util.TodoDetailCallback
 import janaja.organizer.util.TodoLineMoveCallback
 import java.util.*
 
+
 class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbackInterface: TodoDetailCallback) :
     RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>(), TodoLineMoveCallback.ItemTouchHelperInterface {
 
@@ -82,6 +83,20 @@ class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbac
             holder.repeat.setImageResource(R.drawable.repeat)
             holder.lineText.setTypeface(null, Typeface.BOLD)
         }
+
+        // display indentation level
+        val startMargin = when(line.indentationLevel){
+            1 -> holder.itemView.resources.getDimensionPixelOffset(R.dimen.detail_todo_entry_startmargin_lvl1)
+            2 -> holder.itemView.resources.getDimensionPixelOffset(R.dimen.detail_todo_entry_startmargin_lvl2)
+            else -> holder.itemView.resources.getDimensionPixelOffset(R.dimen.detail_todo_entry_startmargin_lvl0)
+        }
+        holder.cv.layoutParams.let { params ->
+            if (params is ViewGroup.MarginLayoutParams){
+                params.marginStart = startMargin
+                holder.cv.requestLayout()
+            }
+        }
+
 
         // remove line on button click
         holder.btnDel.setOnClickListener {
@@ -176,5 +191,19 @@ class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbac
 
     override fun onRowClear(viewHolder: ItemViewHolder) {
         viewHolder.cv.cardElevation = 0f
+    }
+
+    override fun onSwipe(viewHolder: ItemViewHolder, directionStart: Boolean) {
+        if(directionStart){
+            if(dataset[viewHolder.layoutPosition].indentationLevel > 0) {
+                dataset[viewHolder.layoutPosition].indentationLevel--
+                notifyItemChanged(viewHolder.layoutPosition)
+            }
+        } else {
+            if(dataset[viewHolder.layoutPosition].indentationLevel < TodoLine.maxIndent) {
+                dataset[viewHolder.layoutPosition].indentationLevel++
+                notifyItemChanged(viewHolder.layoutPosition)
+            }
+        }
     }
 }

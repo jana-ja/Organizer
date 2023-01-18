@@ -9,10 +9,11 @@ class RoomTodoLine(
     var isChecked: Boolean = false,
     var repeat: Boolean = false,
     var todoId: Long,
+    var indentationLevel: Int,
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 ) {
-    fun toTodoLine(): TodoLine{
-        return TodoLine(text, isChecked, repeat)
+    fun toTodoLine(): TodoLine {
+        return TodoLine(text, isChecked, repeat, indentationLevel)
     }
 }
