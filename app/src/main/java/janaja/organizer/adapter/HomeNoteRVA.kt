@@ -60,8 +60,7 @@ open class HomeNoteRVA(
             holder.body.text = note.body.joinToString(separator = "\n")
         }
         if(note.isPinned){
-            val resources = holder.itemView.context.resources
-            holder.card.strokeWidth = (resources.getDimension(R.dimen.card_view_stroke_width)).toInt()// / resources.displayMetrics.density).toInt()
+            holder.card.strokeWidth = holder.itemView.resources.getDimensionPixelOffset(R.dimen.card_view_stroke_width)
         }
 
         // recyclerview and its parent cardview should have the same behaviour
