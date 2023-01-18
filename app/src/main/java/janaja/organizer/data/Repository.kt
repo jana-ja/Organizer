@@ -122,7 +122,7 @@ class Repository(private val database: AppDatabase) {
 
 
     suspend fun loadAndConvertAllNotes() {
-        val roomNotes = database.roomNoteDao.getAll()
+        val roomNotes = database.roomNoteDao.getAll().reversed()
         val convertedNotes = mutableListOf<Note>()
         // TODO mit coroutine parallelisieren
         roomNotes.forEach {
