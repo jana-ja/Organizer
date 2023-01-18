@@ -33,4 +33,7 @@
     <string name="menu_button_pin_description">pin note button</string>
     <string name="menu_button_pin">Pin</string>
     <string name="todo_add_btn_description">add entry button</string>
+    <string name="detail_todo_add_btn_description">add todo line</string>
+    <string name="detail_todo_entry_del_btn_description">delete todo line</string>
+    <string name="detail_todo_entry_repeat_btn_description">toggle repeat of this todo line</string>
 </resources>

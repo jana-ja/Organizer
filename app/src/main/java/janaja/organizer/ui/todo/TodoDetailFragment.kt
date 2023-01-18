@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import janaja.organizer.R
 import janaja.organizer.adapter.DetailTodoEntryRVA
 import janaja.organizer.data.model.Todo
 import janaja.organizer.databinding.FragmentTodoDetailBinding
 import janaja.organizer.ui.SharedViewModel
 import janaja.organizer.util.TodoDetailCallback
+import janaja.organizer.util.TodoLineMoveCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,6 +43,10 @@ class TodoDetailFragment : Fragment(), TodoDetailCallback {
 
         adapter = DetailTodoEntryRVA(mutableListOf(), this)
         binding.detailNoteBodyRv.adapter = adapter
+        val todoLineMoveCallback = TodoLineMoveCallback(adapter)
+        val touchHelper = ItemTouchHelper(todoLineMoveCallback)
+        touchHelper.attachToRecyclerView(binding.detailNoteBodyRv)
+
         viewModel.loadTodo(noteId)
         viewModel.detailTodo.observe(viewLifecycleOwner){
             if(it != null){

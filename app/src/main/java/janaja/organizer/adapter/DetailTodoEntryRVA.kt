@@ -1,5 +1,6 @@
 package janaja.organizer.adapter
 
+import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.view.LayoutInflater
@@ -8,32 +9,33 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.cardview.widget.CardView
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import janaja.organizer.R
 import janaja.organizer.data.model.TodoLine
 import janaja.organizer.util.TodoDetailCallback
+import janaja.organizer.util.TodoLineMoveCallback
+import java.util.*
 
 class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbackInterface: TodoDetailCallback) :
-    RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>() {
+    RecyclerView.Adapter<DetailTodoEntryRVA.ItemViewHolder>(), TodoLineMoveCallback.ItemTouchHelperInterface {
 
     private lateinit var recyclerView: RecyclerView
-
-    private var oldList: List<TodoLine> = dataset.map { it.copyLine() }
 
     private var insert = false
     private var insertEnd = false
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val btnDel: ImageButton = view.findViewById(R.id.detail_todo_entry_del)
+        val cv: CardView = view.findViewById(R.id.detail_todo_entry_cv)
+        val btnDel: ImageButton = view.findViewById(R.id.detail_todo_entry_del_btn)
         val lineText: EditText = view.findViewById(R.id.detail_todo_entry_line)
         val checkBox: CheckBox = view.findViewById(R.id.detail_todo_entry_checkBox)
-        val repeat: ImageButton = view.findViewById(R.id.detail_todo_entry_repeat)
+        val repeat: ImageButton = view.findViewById(R.id.detail_todo_entry_repeat_btn)
     }
 
     fun addLine(position: Int = dataset.size, line: String = "") {
         insert = true
-        // TODO richtige ID
         dataset.add(position, TodoLine(line))
         notifyItemInserted(position)
     }
@@ -48,6 +50,7 @@ class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbac
         notifyItemRemoved(position)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun submitNewList(newList: MutableList<TodoLine>){
         dataset = newList
         notifyDataSetChanged()
@@ -151,5 +154,27 @@ class DetailTodoEntryRVA(var dataset: MutableList<TodoLine>, private val callbac
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
+    }
+
+    // drag and drop interface
+    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(dataset, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(dataset, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onRowSelected(viewHolder: ItemViewHolder) {
+        viewHolder.cv.cardElevation = 8f
+    }
+
+    override fun onRowClear(viewHolder: ItemViewHolder) {
+        viewHolder.cv.cardElevation = 0f
     }
 }

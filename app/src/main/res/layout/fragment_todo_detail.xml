@@ -48,13 +48,15 @@
                     android:layout_marginEnd="0dp"
                     android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/detail_note_entry_line" />
+                    tools:listitem="@layout/detail_todo_entry_line" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/add_line_cl"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:layout_marginStart="8dp">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginHorizontal="2dp"
+                    android:padding="1dp">
 
                     <TextView
                         android:id="@+id/textView"
@@ -78,7 +80,8 @@
                         app:iconGravity="textStart"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:contentDescription="@string/detail_todo_add_btn_description" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
