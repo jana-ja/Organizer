@@ -49,6 +49,19 @@ class HomeTodoEntryRVA(var dataset: MutableList<TodoLine>, val updateTodo: () ->
         } else {
             holder.lineText.setTypeface(null, Typeface.NORMAL)
         }
+
+        // display indentation level
+        val startMargin = when(line.indentationLevel){
+            1 -> holder.itemView.resources.getDimensionPixelOffset(R.dimen.todo_entry_startmargin_lvl1)
+            2 -> holder.itemView.resources.getDimensionPixelOffset(R.dimen.todo_entry_startmargin_lvl2)
+            else -> holder.itemView.resources.getDimensionPixelOffset(R.dimen.todo_entry_startmargin_lvl0)
+        }
+        holder.lineText.layoutParams.let { params ->
+            if (params is ViewGroup.MarginLayoutParams){
+                params.marginStart = startMargin
+                holder.lineText.requestLayout()
+            }
+        }
     }
 
     override fun getItemCount(): Int {
